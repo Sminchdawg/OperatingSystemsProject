@@ -1,0 +1,31 @@
+# depslib dependency file v1.0
+1581643857 source:/home/csis/Desktop/TermProject/main.cpp
+	<iostream>
+	"DisplayBuffer.h"
+	"VDIFile.h"
+	<iomanip>
+
+1581378892 /home/csis/Desktop/TermProject/include/DisplayBuffer.h
+	<cstdint>
+
+1581469430 /home/csis/Desktop/TermProject/include/VDIFile.h
+	<cstdint>
+	<unistd.h>
+	<fcntl.h>
+
+1581521955 source:/home/csis/Desktop/TermProject/src/DisplayBuffer.cpp
+	"DisplayBuffer.h"
+	<iostream>
+
+1581644136 source:/home/csis/Desktop/TermProject/src/VDIFile.cpp
+	"VDIFile.h"
+	<iostream>
+
+1581347956 source:/home/csis/Desktop/TermProject/include/DisplayBuffer.h.cpp
+	<cstdint>
+
+1581288251 source:/home/csis/Desktop/TermProject/include/VDIFile.h.cpp
+	<cstdint>
+	<unistd.h>
+	<fcntl.h>
+
