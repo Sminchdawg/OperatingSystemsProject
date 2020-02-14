@@ -67,9 +67,6 @@ ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
     int numLoops = 0;
     int vPage, pPage, offset;
 
-
-
-   // Figure out how many bytes to read, probably gonna be 256 or if there isnt 256 less than however many less
     while (bytesLeft > 0) {
         // Finds the virtual page by taking the cursor and diving it by the size of the block ie: 700 / a block size of 300 would tell you that you are in block 2
         vPage = f -> cursor / f -> header.cbBlock;
@@ -77,18 +74,20 @@ ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
         offset = f -> cursor % f -> header.cbBlock;
         // Passes the virtual page into the map and finds the physical
         pPage = f -> map[vPage];
+        cout << "Header: " << f -> header.cbHeader << endl;
+        cout << "OffBlocks: " <<  f -> header.offBlocks << endl;
+        cout << "OffData: " <<  f -> header.offData << endl;
 
-        // Bytes to read is found by taking the block size and subtracting the offset so if the block is size 300 and we are 100 into that block, then we have 200 bytes left
-        bytesToRead = f -> header.cbBlock - offset;
-
-        if (bytesToRead < bytesLeft) {
+        if (bytesLeft < f->header.cbBlock - offset) {
             bytesToRead = bytesLeft;
+        } else {
+            bytesToRead = f->header.cbBlock - offset;
         }
 
 
-        lseek(f -> fd,f -> header.offData + pPage * f -> header.cbBlock + offset, SEEK_SET);
+        int something = lseek(f -> fd,f -> header.offData + pPage * f -> header.cbBlock + offset, SEEK_SET);
 
-       int misterReed = read(f -> fd, buf, bytesToRead);
+        int misterReed = read(f -> fd, buf, bytesToRead);
 
        // Check to see if there was an error in trying to read
        if (misterReed == -1) {
