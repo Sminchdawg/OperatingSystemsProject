@@ -74,9 +74,11 @@ ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
         offset = f -> cursor % f -> header.cbBlock;
         // Passes the virtual page into the map and finds the physical
         pPage = f -> map[vPage];
+        /*
         cout << "Header: " << f -> header.cbHeader << endl;
         cout << "OffBlocks: " <<  f -> header.offBlocks << endl;
         cout << "OffData: " <<  f -> header.offData << endl;
+        */
 
         if (bytesLeft < f->header.cbBlock - offset) {
             bytesToRead = bytesLeft;

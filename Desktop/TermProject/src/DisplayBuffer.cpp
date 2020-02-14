@@ -34,8 +34,9 @@ void displayBufferPage(uint8_t *buf, uint32_t count, uint32_t start, uint64_t of
                 printf(" ");
             }
                 // This prints the hexadecmial values
+
             if (16 * i + j >= start && 16 * i + j < start + count) {
-                printf("%02X", buf[16 * i + j]);
+                printf("%02X", buf[(16 * i + j) - start]);
             } else {
                 printf("  ");
             }
@@ -49,9 +50,9 @@ void displayBufferPage(uint8_t *buf, uint32_t count, uint32_t start, uint64_t of
         for (int j = 0; j < 16; j++) {
 
             if (16 * i + j >= start && 16 * i + j < start + count) {
-                if (isprint(buf[16 * i + j])) {
+                if (isprint(buf[(16 * i + j) - start])) {
                     // This prints the characters values
-                        printf("%c", buf[16 * i + j]);
+                        printf("%c", buf[(16 * i + j) - start]);
                     } else {
                         printf(" ");
                     }
