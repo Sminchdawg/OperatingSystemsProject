@@ -60,8 +60,7 @@ off_t vdiSeek(VDIFile *f, off_t offset, int anchor) {
 }
 
 ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
-    // int start = f -> header.cbHeader;
-    cout << "Count: " << count << endl;
+    cout << "Count me daddy: " << count << endl;
     int bytesLeft = count;
     int bytesToRead;
     int bytesRead = 0;
@@ -72,12 +71,16 @@ ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
 
    // Figure out how many bytes to read, probably gonna be 256 or if there isnt 256 less than however many less
     while (bytesLeft > 0) {
+        // Finds the virtual page by taking the cursor and diving it by the size of the block ie: 700 / a block size of 300 would tell you that you are in block 2
         vPage = f -> cursor / f -> header.cbBlock;
+        // Offset is found from taking the cursor and modding the block size ie: the cursor is 700 and the block size is 300, we know we are 100 bytes into that block
         offset = f -> cursor % f -> header.cbBlock;
+        // Passes the virtual page into the map and finds the physical
         pPage = f -> map[vPage];
 
+        // Bytes to read is found by taking the block size and subtracting the offset so if the block is size 300 and we are 100 into that block, then we have 200 bytes left
+        bytesToRead = f -> header.cbBlock - offset;
 
-        bytesToRead = f->header.cbBlock - offset;
         if (bytesToRead < bytesLeft) {
             bytesToRead = bytesLeft;
         }
@@ -89,9 +92,9 @@ ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
 
        // Check to see if there was an error in trying to read
        if (misterReed == -1) {
-        bytesRead = -1;
-        cout << "There was an error reading the file";
-        break;
+            bytesRead = -1;
+            cout << "There was an error reading the file";
+            break;
        }
 
        bytesLeft -= bytesToRead;

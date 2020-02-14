@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1581643857 source:/home/csis/Desktop/TermProject/main.cpp
+1581646919 source:/home/csis/Desktop/TermProject/main.cpp
 	<iostream>
 	"DisplayBuffer.h"
 	"VDIFile.h"
@@ -17,7 +17,7 @@
 	"DisplayBuffer.h"
 	<iostream>
 
-1581644136 source:/home/csis/Desktop/TermProject/src/VDIFile.cpp
+1581647285 source:/home/csis/Desktop/TermProject/src/VDIFile.cpp
 	"VDIFile.h"
 	<iostream>
 
