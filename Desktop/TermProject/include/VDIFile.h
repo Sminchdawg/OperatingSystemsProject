@@ -69,5 +69,6 @@ struct VDIFile *vdiOpen(char *fn);
 ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count);
 off_t vdiSeek(VDIFile *f, off_t offset, int anchor);
 void vdiClose (struct VDIFile *f);
+ssize_t vdiWrite(struct VDIFile *f, void *buf, size_t count);
 
 #endif // VDIFILE_H

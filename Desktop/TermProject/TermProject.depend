@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1581693847 source:/home/csis/Desktop/TermProject/main.cpp
+1581952169 source:/home/csis/Desktop/TermProject/main.cpp
 	<iostream>
 	"DisplayBuffer.h"
 	"VDIFile.h"
@@ -8,7 +8,7 @@
 1581378892 /home/csis/Desktop/TermProject/include/DisplayBuffer.h
 	<cstdint>
 
-1581469430 /home/csis/Desktop/TermProject/include/VDIFile.h
+1581951984 /home/csis/Desktop/TermProject/include/VDIFile.h
 	<cstdint>
 	<unistd.h>
 	<fcntl.h>
@@ -17,7 +17,7 @@
 	"DisplayBuffer.h"
 	<iostream>
 
-1581693005 source:/home/csis/Desktop/TermProject/src/VDIFile.cpp
+1581952154 source:/home/csis/Desktop/TermProject/src/VDIFile.cpp
 	"VDIFile.h"
 	<iostream>
 
@@ -28,4 +28,9 @@
 	<cstdint>
 	<unistd.h>
 	<fcntl.h>
+
+1581704744 source:/home/csis/Desktop/TermProject/src/PartitionFile.cpp
+	"PartitionFile.h"
+
+1581704940 /home/csis/Desktop/TermProject/include/PartitionFile.h
 

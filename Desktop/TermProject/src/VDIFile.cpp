@@ -74,11 +74,6 @@ ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
         offset = f -> cursor % f -> header.cbBlock;
         // Passes the virtual page into the map and finds the physical
         pPage = f -> map[vPage];
-        /*
-        cout << "Header: " << f -> header.cbHeader << endl;
-        cout << "OffBlocks: " <<  f -> header.offBlocks << endl;
-        cout << "OffData: " <<  f -> header.offData << endl;
-        */
 
         if (bytesLeft < f->header.cbBlock - offset) {
             bytesToRead = bytesLeft;
@@ -102,33 +97,43 @@ ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
        bytesRead += bytesToRead;
        numLoops++;
     }
-    // Maybe????
+
     return bytesRead;
 }
 
-/*
-ssize_t vdiWrite(struct VDIFile *f, void *buf, size_t count) {
-    int bytesLeft = count;
-    int bytesWrote = 0;
-    int bytesToWrite;
-    int numLoops = 0;
 
-   // Figure out how many bytes to write, probably gonna be 256 or if there isnt 256 less than however many less
+ssize_t vdiWrite(struct VDIFile *f, void *buf, size_t count) {
+    cout << "Count me daddy: " << count << endl;
+    int bytesLeft = count;
+    int bytesToWrite;
+    int bytesWrote = 0;
+    int numLoops = 0;
+    int vPage, pPage, offset;
+
     while (bytesLeft > 0) {
-        if (bytesLeft < 256) {
+        // Finds the virtual page by taking the cursor and diving it by the size of the block ie: 700 / a block size of 300 would tell you that you are in block 2
+        vPage = f -> cursor / f -> header.cbBlock;
+        // Offset is found from taking the cursor and modding the block size ie: the cursor is 700 and the block size is 300, we know we are 100 bytes into that block
+        offset = f -> cursor % f -> header.cbBlock;
+        // Passes the virtual page into the map and finds the physical
+        pPage = f -> map[vPage];
+
+        if (bytesLeft < f->header.cbBlock - offset) {
             bytesToWrite = bytesLeft;
         } else {
-            bytesToWrite = 256;
+            bytesToWrite = f->header.cbBlock - offset;
         }
 
-        // Figure out where to start on the page/block
-        // Missing offset
-       lseek(fileDescriptor, numLoops, SEEK_SET);
-       int missedWrittens = write(fileDescriptor, buf, bytesToWrite);
 
-       if (missedWrittens == -1) {
-        bytesWrote = -1;
-        break;
+        int something = lseek(f -> fd,f -> header.offData + pPage * f -> header.cbBlock + offset, SEEK_SET);
+
+        int missWrittens = write(f -> fd, buf, bytesToWrite);
+
+       // Check to see if there was an error in trying to write
+       if (missWrittens == -1) {
+            bytesWrote = -1;
+            cout << "There was an error reading the file";
+            break;
        }
 
        bytesLeft -= bytesToWrite;
@@ -138,4 +143,4 @@ ssize_t vdiWrite(struct VDIFile *f, void *buf, size_t count) {
 
     return bytesWrote;
 }
-*/
+

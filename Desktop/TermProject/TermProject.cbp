@@ -24,6 +24,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -35,9 +36,11 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="include/DisplayBuffer.h" />
+		<Unit filename="include/PartitionFile.h" />
 		<Unit filename="include/VDIFile.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/DisplayBuffer.cpp" />
+		<Unit filename="src/PartitionFile.cpp" />
 		<Unit filename="src/VDIFile.cpp" />
 		<Extensions>
 			<code_completion />
