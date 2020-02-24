@@ -60,7 +60,7 @@ off_t vdiSeek(VDIFile *f, off_t offset, int anchor) {
 }
 
 ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
-    cout << "Count me daddy: " << count << endl;
+    // cout << "Count me daddy: " << count << endl;
     int bytesLeft = count;
     int bytesToRead;
     int bytesRead = 0;
