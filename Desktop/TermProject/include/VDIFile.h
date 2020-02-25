@@ -60,7 +60,7 @@ typedef struct VDIHeader
 
 struct VDIFile {
     int fd;
-    VDIHeader header;
+    VDIHeader* header;
     uint32_t *map;
     int64_t cursor;
 };

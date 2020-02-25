@@ -4,10 +4,6 @@
 using namespace std;
 
 void displayBufferPage(uint8_t *buf, uint32_t count, uint32_t start, uint64_t offset) {
-    /*for (int i = 0; i < count; i++) {
-        printf("%02X", buf[i]);
-    }
-    */
     char hex[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
     printf("Offset: 0x");

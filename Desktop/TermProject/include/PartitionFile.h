@@ -5,7 +5,7 @@
 #include <iomanip>
 
 struct PartitionFile {
-    VDIFile vdiFile;
+    VDIFile* vdiFile;
     int64_t partitionStart;
     int64_t partitionSize;
 };

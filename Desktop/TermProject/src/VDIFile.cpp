@@ -14,14 +14,16 @@ struct VDIFile *vdiOpen(char *fn) {
         cout << "Cannot open file" << endl;
         return NULL;
     }
+    VDIHeader* header = new VDIHeader;
 
-    read(f -> fd, &(f -> header), sizeof(VDIHEADER1PLUS));
+    read(f -> fd, header, sizeof(VDIHEADER1PLUS));
+    f -> header = header;
 
     f -> cursor = 0;
 
-    f -> map = new uint32_t[f -> header.cBlocks];
-    lseek(f -> fd, f -> header.offBlocks, SEEK_SET);
-    read(f -> fd, f -> map, f -> header.cBlocks * sizeof(uint32_t));
+    f -> map = new uint32_t[f -> header -> cBlocks];
+    lseek(f -> fd, f -> header -> offBlocks, SEEK_SET);
+    read(f -> fd, f -> map, f -> header -> cBlocks * sizeof(uint32_t));
 
     return f;
 };
@@ -43,13 +45,13 @@ off_t vdiSeek(VDIFile *f, off_t offset, int anchor) {
     } else if (anchor == SEEK_CUR) {
         newLocation = offset + f -> cursor; // offset + currentLocation
     } else if (anchor == SEEK_END) {
-        newLocation = offset + f -> header.cbDisk; // offset plus max size
+        newLocation = offset + f -> header -> cbDisk; // offset plus max size
     } else {
         cout << "The anchor is invalid";
         return -1; // This is if the anchor is invalid, we must fail
     }
 
-    if (newLocation >= 0 && newLocation < f -> header.cbDisk) {
+    if (newLocation >= 0 && newLocation < f -> header -> cbDisk) {
         f -> cursor = newLocation;
     } else {
         cout << "The cursor was moved out of the disk space";
@@ -60,7 +62,6 @@ off_t vdiSeek(VDIFile *f, off_t offset, int anchor) {
 }
 
 ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
-    // cout << "Count me daddy: " << count << endl;
     int bytesLeft = count;
     int bytesToRead;
     int bytesRead = 0;
@@ -69,20 +70,20 @@ ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
 
     while (bytesLeft > 0) {
         // Finds the virtual page by taking the cursor and diving it by the size of the block ie: 700 / a block size of 300 would tell you that you are in block 2
-        vPage = f -> cursor / f -> header.cbBlock;
+        vPage = f -> cursor / f -> header -> cbBlock;
         // Offset is found from taking the cursor and modding the block size ie: the cursor is 700 and the block size is 300, we know we are 100 bytes into that block
-        offset = f -> cursor % f -> header.cbBlock;
+        offset = f -> cursor % f -> header -> cbBlock;
         // Passes the virtual page into the map and finds the physical
         pPage = f -> map[vPage];
 
-        if (bytesLeft < f->header.cbBlock - offset) {
+        if (bytesLeft < f->header -> cbBlock - offset) {
             bytesToRead = bytesLeft;
         } else {
-            bytesToRead = f->header.cbBlock - offset;
+            bytesToRead = f->header -> cbBlock - offset;
         }
 
 
-        int something = lseek(f -> fd,f -> header.offData + pPage * f -> header.cbBlock + offset, SEEK_SET);
+        int something = lseek(f -> fd,f -> header -> offData + pPage * f -> header -> cbBlock + offset, SEEK_SET);
 
         int misterReed = read(f -> fd, buf, bytesToRead);
 
@@ -112,20 +113,20 @@ ssize_t vdiWrite(struct VDIFile *f, void *buf, size_t count) {
 
     while (bytesLeft > 0) {
         // Finds the virtual page by taking the cursor and diving it by the size of the block ie: 700 / a block size of 300 would tell you that you are in block 2
-        vPage = f -> cursor / f -> header.cbBlock;
+        vPage = f -> cursor / f -> header -> cbBlock;
         // Offset is found from taking the cursor and modding the block size ie: the cursor is 700 and the block size is 300, we know we are 100 bytes into that block
-        offset = f -> cursor % f -> header.cbBlock;
+        offset = f -> cursor % f -> header -> cbBlock;
         // Passes the virtual page into the map and finds the physical
         pPage = f -> map[vPage];
 
-        if (bytesLeft < f->header.cbBlock - offset) {
+        if (bytesLeft < f->header -> cbBlock - offset) {
             bytesToWrite = bytesLeft;
         } else {
-            bytesToWrite = f->header.cbBlock - offset;
+            bytesToWrite = f->header -> cbBlock - offset;
         }
 
 
-        int something = lseek(f -> fd,f -> header.offData + pPage * f -> header.cbBlock + offset, SEEK_SET);
+        int something = lseek(f -> fd,f -> header -> offData + pPage * f -> header -> cbBlock + offset, SEEK_SET);
 
         int missWrittens = write(f -> fd, buf, bytesToWrite);
 
