@@ -21,7 +21,8 @@ int main()
     cout << "The amount of read bytes: " << read << endl;
     displayBufferPage(pageBuffer, 64, 190, 256);
     */
-    PartitionEntry partitionEntry[64];
+
+    PartitionEntry partitionEntry[4];
     vdiSeek(f, 446, SEEK_CUR);
     vdiRead(f, partitionEntry, 64);
     // partitionOpen(f, partitionEntry);
@@ -31,10 +32,6 @@ int main()
         printPartitionEntry(partitionEntry[i]);
         cout << endl << endl;
     }
-
-
-
-
 
     vdiClose(f);
     return 0;

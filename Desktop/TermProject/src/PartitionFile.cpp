@@ -45,40 +45,39 @@ off_t partitionSeek(struct PartitionFile *f,off_t offset,int anchor) {
 
 void printPartitionEntry(PartitionEntry partitionEntry) {
     cout << "Status: ";
-    if (partitionEntry.partitionInformation[0] == 00 || partitionEntry.partitionInformation[0] == 80) {
+    if (partitionEntry.status == 00 || partitionEntry.status == 80) {
       cout << "Inactive" << endl;
     } else {
         cout << "Active" << endl;
     }
+
     cout << "First Sector CHS: ";
-        for (int i = 1; i < 4; i ++) {
-        printf("%d", partitionEntry.partitionInformation[i]);
-        if (i != 3)
+        printf("%d", partitionEntry.first_cylinder);
         cout << "-";
-    }
-    cout << endl;
-    cout << "Last Sector CHS: ";
-        for (int i = 4; i < 7; i ++) {
-        printf("%d", partitionEntry.partitionInformation[i]);
-        if (i != 6)
+        printf("%d", partitionEntry.first_head);
         cout << "-";
-    }
+        printf("%d", partitionEntry.first_sector);
     cout << endl;
+
+    cout << "First Sector CHS: ";
+        printf("%d", partitionEntry.last_cylinder);
+        cout << "-";
+        printf("%d", partitionEntry.last_head);
+        cout << "-";
+        printf("%d", partitionEntry.last_sector);
+    cout << endl;
+
     cout << "Partition Type: ";
-    // printf("%02X", partitionEntry[0].partitionInformation[4]);
-    if (partitionEntry.partitionInformation[4] == 83) {
+    if (partitionEntry.type) {
         cout << "83 Linux Native" << endl;
     } else {
         cout << "00 Empty" << endl;
     }
+
     cout << "First LBA Sector: ";
-    for (int i = 8; i < 12; i ++) {
-        printf("%d", partitionEntry.partitionInformation[i]);
-    }
+        printf("%d", partitionEntry.first_lba_sector);
     cout << endl;
 
     cout << "LBA Sector Count: ";
-    for (int i = 12; i < 16; i ++) {
-        printf("%d", partitionEntry.partitionInformation[i]);
-    }
+        printf("%d", partitionEntry.lba_sector_count);
 }

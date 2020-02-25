@@ -10,8 +10,18 @@ struct PartitionFile {
     int64_t partitionSize;
 };
 
+// 16 Bytes
 struct PartitionEntry {
-    uint8_t partitionInformation[16];
+    uint8_t status; // Byte 0
+    uint8_t first_head; // Byte 1
+    uint8_t first_sector; // Byte 2
+    uint8_t first_cylinder; // Byte 3
+    uint8_t type; // Byte 4
+    uint8_t last_head; // Byte 5
+    uint8_t last_sector; // Byte 6
+    uint8_t last_cylinder; // Byte 7
+    uint32_t first_lba_sector; // Bytes 8-11
+    uint32_t lba_sector_count; // Bytes 12-15
 };
 
 struct PartitionFile *partitionOpen(struct VDIFile *,struct PartitionEntry);
