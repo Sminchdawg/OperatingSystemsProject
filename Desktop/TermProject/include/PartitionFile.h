@@ -6,8 +6,8 @@
 
 struct PartitionFile {
     VDIFile* vdiFile;
-    int64_t partitionStart;
-    int64_t partitionSize;
+    uint64_t partitionStart;
+    uint64_t partitionSize;
 };
 
 // 16 Bytes

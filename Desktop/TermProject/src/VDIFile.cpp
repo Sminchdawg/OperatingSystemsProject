@@ -38,7 +38,7 @@ void vdiClose (struct VDIFile *f) {
 }
 
 off_t vdiSeek(VDIFile *f, off_t offset, int anchor) {
-    int newLocation = 0;
+    uint64_t newLocation = 0;
 
     if (anchor == SEEK_SET) {
         newLocation = offset; // offset
@@ -84,7 +84,10 @@ ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
 
 
         int something = lseek(f -> fd,f -> header -> offData + pPage * f -> header -> cbBlock + offset, SEEK_SET);
-
+        /*
+        cout << "OffData: " << f->header->offData << endl;
+        cout << "Cursor of fd: " << something << endl;
+        */
         int misterReed = read(f -> fd, buf, bytesToRead);
 
        // Check to see if there was an error in trying to read
