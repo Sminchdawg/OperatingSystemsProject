@@ -11,6 +11,7 @@ struct PartitionFile *partitionOpen(struct VDIFile *f, struct PartitionEntry par
 
     partitionFile -> partitionStart = partitionEntry.first_lba_sector * 512;
     partitionFile -> partitionSize = partitionEntry.lba_sector_count * 512;
+    cout << partitionFile -> partitionStart;
 
     return partitionFile;
 };
@@ -26,23 +27,30 @@ ssize_t partitionRead(struct PartitionFile *f,void *buf,size_t count) {
     if (count > f -> partitionSize) {
         cout << "Too big count paps";
     } else {
-        // vdiSeek(f, f -> partitionStart, SEEK_CUR);
         bytesRead = vdiRead(f -> vdiFile, buf, count);
     }
     return bytesRead;
 }
-/*
+
 ssize_t partitionWrite(struct PartitionFile *f,void *buf,size_t count) {
     // Operates the same as vdiWrite(). Restrict count so that it does not write beyond the end of the partition.
+    int bytesWrote;
+
+    if (count > f -> partitionSize) {
+        cout << "Too big count paps";
+    } else {
+        bytesWrote = vdiWrite(f -> vdiFile, buf, count);
+    }
+    return bytesWrote;
 }
-*/
+
 off_t partitionSeek(struct PartitionFile *f,off_t offset,int anchor) {
     // Operates the same as vdiSeek().  Restrict the function so that the cursor remains un-changed if a location outside the partition is requested
     // f -> cursor = f -> vdiFile -> cursor;
     uint64_t newCursor = 0;
 
     if (!newCursor < f -> partitionStart || !newCursor > f -> partitionSize + f -> partitionStart) {
-        newCursor = vdiSeek(f-> vdiFile, f -> partitionStart, SEEK_CUR);
+        newCursor = vdiSeek(f-> vdiFile, f -> partitionStart + offset, SEEK_CUR);
     } else {
         cout << "The requested location is outside of the boundaries of that partition";
     }

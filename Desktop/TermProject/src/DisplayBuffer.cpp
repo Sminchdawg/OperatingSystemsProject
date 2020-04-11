@@ -66,6 +66,7 @@ void displayBufferPage(uint8_t *buf, uint32_t count, uint32_t start, uint64_t of
 
 void displayBuffer(uint8_t *buf, uint32_t count, uint64_t offset) {
     int rounds = (count + 255)/ 256;
+    // TODO: Maybe use newOffset? seems to work for now
     int newOffset = offset;
 
     for (int i = 0; i < rounds; i++) {
