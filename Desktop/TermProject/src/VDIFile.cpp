@@ -67,7 +67,6 @@ ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
     int bytesRead = 0;
     int numLoops = 0;
     int vPage, pPage, offset;
-
     while (bytesLeft > 0) {
         // Finds the virtual page by taking the cursor and diving it by the size of the block ie: 700 / a block size of 300 would tell you that you are in block 2
         vPage = f -> cursor / f -> header -> cbBlock;

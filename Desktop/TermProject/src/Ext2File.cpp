@@ -25,14 +25,20 @@ struct Ext2File *ext2Open(char *fn, int32_t pNum) {
         chosenPartitionEntry = partitionEntry[pNum];
     }
 
+
+
     // Temp hack
     vdiSeek(f, -446, SEEK_CUR);
 
     ext2File -> partitionFile = partitionOpen(f, chosenPartitionEntry);
-    int read = partitionRead(ext2File -> partitionFile, &(ext2File->superBlock), 1024);
-    // printf("%d", &(ext2File->superBlock->s_log_block_size));
-    printf("%d", &(ext2File->superBlock->s_inodes_per_group));
-    // cout << read;
+    partitionSeek(ext2File->partitionFile, 1024, SEEK_CUR);
+    int read = partitionRead(ext2File->partitionFile, ext2File->superBlock, 1024);
+
+    ext2File->num_block_groups = ext2File->superBlock->s_blocks_count / ext2File->superBlock->s_blocks_per_group;
+    ext2File->bgdt->blockGroups = new Blockgroup[ext2File->num_block_groups];
+
+
+    read = partitionRead(ext2File->partitionFile, ext2File->bgdt, 32);
 
     // ext2File -> partitionRead(ext2File -> PartitionFile, pageBuffer, 32);
     // Populate all of the fields of your strcture and return a pointer to it.
@@ -77,10 +83,103 @@ int32_t writeSuperblock(struct Ext2File *f, uint32_t blockNum, struct Ext2Superb
    // Return 0 for success, non-zero for failure.
 }
 
-void displaySuperBlock() {
+void displaySuperBlock(struct Superblock* superblock) {
+    // TODO: Actually format and print out UUID and stuff
     // Display fields labeled and in text form for superblock.
-}
+    cout << "Superblock Contents: " << endl;
 
+    cout << "Number of inodes: ";
+    printf("%d\n", superblock->s_inodes_count);
+    cout << "Number of blocks: ";
+    printf("%d\n", superblock->s_blocks_count);
+    cout << "Number of reserved blocks: ";
+    printf("%d\n", superblock->s_r_blocks_count);
+    cout << "Number of free blocks: ";
+    printf("%d\n", superblock->s_free_blocks_count);
+    cout << "Number of free inodes: ";
+    printf("%d\n", superblock->s_free_inodes_count);
+    cout << "First data block: ";
+    printf("%d\n", superblock->s_first_data_block);
+    cout << "Log block size: ";
+    printf("%d\n", superblock->s_log_block_size);
+    cout << "Log fragment size: ";
+    printf("%d\n", superblock->s_log_frag_size);
+    cout << "Blocks per group: ";
+    printf("%d\n", superblock->s_blocks_per_group);
+    cout << "Fragments per group: ";
+    printf("%d\n", superblock->s_frags_per_group);
+    cout << "Inodes per group: ";
+    printf("%d\n", superblock->s_inodes_per_group);
+    cout << "Last mount time: ";
+    printf("%d\n", superblock->s_mtime);
+    cout << "Last write time: ";
+    printf("%d\n", superblock->s_wtime);
+    cout << "Mount count: ";
+    printf("%d\n", superblock->s_mnt_count);
+    cout << "Max mount count: ";
+    printf("%d\n", superblock->s_max_mnt_count);
+    cout << "Magic number: ";
+    cout << "0x";
+    printf("%02x\n", superblock->s_magic);
+    cout << "State: ";
+    printf("%d\n", superblock->s_state);
+    cout << "Error processing: ";
+    printf("%d\n", superblock->s_errors);
+    cout << "Revision level: ";
+    printf("%d\n", superblock->s_minor_rev_lvel);
+    cout << "Last system check: ";
+    printf("%d\n", superblock->s_lastcheck);
+    cout << "Check interval: ";
+    printf("%d\n", superblock->s_checkinternval);
+    cout << "OS creator: ";
+    printf("%d\n", superblock->s_creater_os);
+    cout << "Default reserve UID: ";
+    printf("%d\n", superblock->s_rev_level);
+    cout << "Default reserve GID: ";
+    printf("%d\n", superblock->s_def_resuid);
+    cout << "First inode number: ";
+    printf("%d\n", superblock->s_def_resgid);
+    cout << "Inode size: ";
+    printf("%d\n", superblock->s_first_ino);
+    cout << "Block group number: ";
+    printf("%d\n", superblock->s_block_group_nr);
+    cout << "Feature compatibility bits: ";
+    cout << "0x";
+    printf("%02X\n", superblock->s_feature_compat);
+    cout << "Feature incompatibility bits: ";
+    cout << "0x";
+    printf("%02X\n", superblock->s_feature_incompat);
+    cout << "Feature read/only compatibility bits: ";
+    cout << "0x";
+    printf("%02X\n", superblock->s_feature_ro_compat);
+    cout << "UUID: ";
+    printf("%d\n", superblock->s_uuid);
+    cout << "Volume name: ";
+    printf("%d\n", superblock->s_volume_name);
+    cout << "Last mount point: ";
+    printf("%d\n", superblock->s_last_mounted);
+    cout << "Algorithm bitmap: ";
+    printf("%d\n", superblock->s_algo_bitmap);
+    cout << "Number of blocks to preallocate: ";
+    printf("%d\n", superblock->s_prealloc_blocks);
+    cout << "Number of blocks to preallocate for directories: ";
+    printf("%d\n", superblock->s_prealloc_dir_blocks);
+    cout << "Journal UUID: ";
+    printf("%d\n", superblock->s_journal_uuid);
+    cout << "Journal inode number: ";
+    printf("%d\n", superblock->s_journal_inum);
+    cout << "Journal device number: ";
+    printf("%d\n", superblock->s_journal_dev);
+    cout << "Journal last orphan inode number: ";
+    printf("%d\n", superblock->s_last_orphan);
+    cout << "Default hash version: ";
+    printf("%d\n", superblock->s_def_hash_version);
+    cout << "Default mount option bitmap: ";
+    cout << "0x";
+    printf("%02X\n", superblock->s_default_mount_options);
+    cout << "First meta block group: ";
+    printf("%d\n", superblock->s_first_meta_bg);
+}
 
 // Block group descriptor table functions
 
@@ -95,6 +194,15 @@ int32_t writeBGDT(struct Ext2File *f, uint32_t blockNum, struct Ext2BlockGroupDe
     // Return 0 for success, non-zero for failure.
 }
 
-void displayBGDT() {
+void displayBGDT(struct BGDT* bgdt) {
     // Display the values in the block group descriptor table.
+    /*
+    cout << "Block group descriptor table: " << endl;
+    cout << "Block  " << "Block  " << "Inode  " << "Inode  " << "Free   " << "Free   " << "Used  " << endl;
+    cout << "Number " << "Bitmap " << "Bitmap " << "Table  " << "Blocks " << "Inodes " << "Dirs  " << endl;
+    cout << "------ " << "------ " << "------ " << "-----  " << "------ " << "------ " << "----  ";
+    for (int i = 0; i < 16; i++) {
+        cout << i <<
+    }
+    */
 }

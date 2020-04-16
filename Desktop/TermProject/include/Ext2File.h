@@ -34,7 +34,7 @@ struct Superblock {
 
     // EXT2_DYNAMIC_REV
     uint32_t s_first_ino; // Bytes 85-88
-    uint16_t s_inode_size; // Bytes 89-90
+    uint16_t s_inode_size; // Bytes 89-90s
     uint16_t s_block_group_nr; // Bytes 91-92
     uint32_t s_feature_compat; // Bytes 93-96
     uint32_t s_feature_incompat; // Bytes 97-100
@@ -66,7 +66,7 @@ struct Superblock {
     uint8_t unused[760]; // Bytes 264-1024
 };
 
-struct BGDT {
+struct Blockgroup {
     uint32_t bg_block_bitmap; // Bytes 0-4
     uint32_t bg_inode_bitmap; // Bytes 5-8
     uint32_t bg_inode_table; // Bytes 9-12
@@ -77,10 +77,17 @@ struct BGDT {
     uint8_t bg_reserved[12]; // Bytes 21-32
 };
 
+struct BGDT {
+    int tacos;
+    Blockgroup* blockGroups;
+};
+
 struct Ext2File {
     PartitionFile* partitionFile;
-    Superblock* superBlock;
-    BGDT* bgdt;
+    Superblock* superBlock = new Superblock;
+    BGDT* bgdt = new BGDT;
+    uint32_t file_system_block_size;
+    uint32_t num_block_groups;
 };
 
 struct Ext2File *ext2Open(char *fn, int32_t pNum);
@@ -89,8 +96,9 @@ int32_t fetchBlock(struct Ext2File * f, uint32_t blockNum, void *buf);
 int32_t writeBlock(struct Ext2File *f, uint32_t blockNum, void *buf);
 int32_t fetchSuperblock(struct Ext2File *f, uint32_t blockNum, struct Ext2Superblock *sb);
 int32_t writeSuperblock(struct Ext2File *f, uint32_t blockNum, struct Ext2Superblock *sb);
-void displaySuperBlock();
+void displaySuperBlock(struct Superblock* superblock);
 int32_t fetchBGDT(struct Ext2File *f, uint32_t blockNum, struct Ext2BlockGRoupDescriptor *bgdt);
 int32_t writeBGDT(struct Ext2File *f, uint32_t blockNum, struct Ext2BlockGroupDescriptor *bgdt);
-void displayBGDT();
+void displayBGDT(struct BGDT* bgdt);
+// void formatText(string text, string format, data);
 #endif // EXT2FILE_H

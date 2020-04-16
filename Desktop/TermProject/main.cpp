@@ -27,7 +27,10 @@ int main()
     vdiSeek(f, -446, SEEK_CUR);
     */
 
-    Ext2File* f = ext2Open("/home/csis/5806.public/Test-dynamic-1k.vdi", -1);
+    Ext2File* f = ext2Open("/home/csis/5806.public/Test-fixed-1k.vdi", -1);
+    displaySuperBlock(f->superBlock);
+    cout << endl;
+    displayBGDT(f->bgdt);
     // printf("%d", f->superBlock->s_blocks_count);
     ext2Close(f);
 
