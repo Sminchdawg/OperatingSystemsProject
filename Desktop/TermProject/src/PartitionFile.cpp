@@ -11,7 +11,6 @@ struct PartitionFile *partitionOpen(struct VDIFile *f, struct PartitionEntry par
 
     partitionFile -> partitionStart = partitionEntry.first_lba_sector * 512;
     partitionFile -> partitionSize = partitionEntry.lba_sector_count * 512;
-    cout << partitionFile -> partitionStart;
 
     return partitionFile;
 };

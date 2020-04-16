@@ -25,6 +25,8 @@ int main()
     // Temp hack
     vdiSeek(f, -446, SEEK_CUR);
 
+    PartitionFile* partitionFile = partitionOpen(f, partitionEntry[0]);
+
     /*
     Write stuff
     PartitionFile* partitionFile = partitionOpen(f, partitionEntry[0]);
@@ -36,10 +38,11 @@ int main()
     int seek = partitionSeek(partitionFile, 1024, SEEK_CUR);
     cout << "Cursor: " << partitionFile -> vdiFile -> cursor << endl;
     int read = partitionRead(partitionFile, pageBuffer, 1024);
-    */
-
-
     displayBuffer(pageBuffer, 10, 0);
     partitionClose(partitionFile);
+    */
+
+    displaySuperBlock();
+
     return 0;
 }
