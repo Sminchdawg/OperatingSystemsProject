@@ -28,16 +28,23 @@ struct Ext2File *ext2Open(char *fn, int32_t pNum) {
     // Temp hack
     vdiSeek(f, -446, SEEK_CUR);
 
+    // Gets partitionFile
     ext2File -> partitionFile = partitionOpen(f, chosenPartitionEntry);
+
+
+    // Gets superblock
     partitionSeek(ext2File->partitionFile, 1024, SEEK_CUR);
+    cout << ext2File->partitionFile->vdiFile->cursor << endl;
     int read = partitionRead(ext2File->partitionFile, ext2File->superBlock, 1024);
 
-    ext2File->num_block_groups = ext2File->superBlock->s_blocks_count / ext2File->superBlock->s_blocks_per_group;
+    // Sets num_block_groups and creates blockGroups array based on that size
+    ext2File->num_block_groups = ceil((float)ext2File->superBlock->s_blocks_count / (float)ext2File->superBlock->s_blocks_per_group);
     ext2File->bgdt->blockGroups = new Blockgroup[ext2File->num_block_groups];
 
-    read = partitionRead(ext2File->partitionFile, ext2File->bgdt, ext2File->num_block_groups * 32);
+    // Gets BGDT
+    vdiSeek(ext2File->partitionFile->vdiFile, 1024, SEEK_CUR);
+    read = partitionRead(ext2File->partitionFile, ext2File->bgdt->blockGroups, ext2File->num_block_groups * 32);
 
-    // ext2File -> partitionRead(ext2File -> PartitionFile, pageBuffer, 32);
     // Populate all of the fields of your strcture and return a pointer to it.
     return ext2File;
 }
@@ -191,15 +198,25 @@ int32_t writeBGDT(struct Ext2File *f, uint32_t blockNum, struct Ext2BlockGroupDe
     // Return 0 for success, non-zero for failure.
 }
 
-void displayBGDT(struct BGDT* bgdt) {
+void displayBGDT(struct Ext2File *f) {
     // Display the values in the block group descriptor table.
-    /*
     cout << "Block group descriptor table: " << endl;
     cout << "Block  " << "Block  " << "Inode  " << "Inode  " << "Free   " << "Free   " << "Used  " << endl;
     cout << "Number " << "Bitmap " << "Bitmap " << "Table  " << "Blocks " << "Inodes " << "Dirs  " << endl;
-    cout << "------ " << "------ " << "------ " << "-----  " << "------ " << "------ " << "----  ";
-    for (int i = 0; i < 16; i++) {
-        cout << i <<
+    cout << "------ " << "------ " << "------ " << "-----  " << "------ " << "------ " << "----  " << endl;
+    for (int i = 0; i < f->num_block_groups; i++) {
+        cout << i << "       ";
+        printf("%d", f->bgdt->blockGroups[i].bg_block_bitmap);
+        cout << "     ";
+        printf("%d", f->bgdt->blockGroups[i].bg_inode_bitmap);
+        cout << "     ";
+        printf("%d", f->bgdt->blockGroups[i].bg_inode_table);
+        cout << "     ";
+        printf("%d", f->bgdt->blockGroups[i].bg_free_blocks_count);
+        cout << "     ";
+        printf("%d", f->bgdt->blockGroups[i].bg_free_inodes_count);
+        cout << "     ";
+        printf("%d", f->bgdt->blockGroups[i].bg_used_dirs_count);
+        cout << endl;
     }
-    */
 }

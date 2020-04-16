@@ -79,7 +79,6 @@ struct Blockgroup {
 };
 
 struct BGDT {
-    int tacos;
     Blockgroup* blockGroups;
 };
 
@@ -88,7 +87,7 @@ struct Ext2File {
     Superblock* superBlock = new Superblock;
     BGDT* bgdt = new BGDT;
     uint32_t file_system_block_size;
-    uint32_t num_block_groups;
+    int num_block_groups;
 };
 
 struct Ext2File *ext2Open(char *fn, int32_t pNum);
@@ -100,6 +99,6 @@ int32_t writeSuperblock(struct Ext2File *f, uint32_t blockNum, struct Ext2Superb
 void displaySuperBlock(struct Superblock* superblock);
 int32_t fetchBGDT(struct Ext2File *f, uint32_t blockNum, struct Ext2BlockGRoupDescriptor *bgdt);
 int32_t writeBGDT(struct Ext2File *f, uint32_t blockNum, struct Ext2BlockGroupDescriptor *bgdt);
-void displayBGDT(struct BGDT* bgdt);
+void displayBGDT(struct Ext2File *f);
 // void formatText(string text, string format, data);
 #endif // EXT2FILE_H
