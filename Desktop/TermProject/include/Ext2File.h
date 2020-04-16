@@ -1,14 +1,11 @@
 #ifndef EXT2FILE_H
 #define EXT2FILE_H
-
-struct Ext2File {
-    Superblock* superblock;
-};
+#include <iostream>
+#include <iomanip>
+#include "VDIFile.h"
+#include "PartitionFile.h"
 
 struct Superblock {
-    int32_t system_block_size;
-    int32_t num_block_groups;
-
     uint32_t s_inodes_count; // Bytes 0-4
     uint32_t s_blocks_count; // Bytes 5-8
     uint32_t s_r_blocks_count; // Bytes 9-12
@@ -59,7 +56,7 @@ struct Superblock {
     uint32_t s_last_orphan; // Bytes 233-236
 
     // Directory Indexing Support
-    uint32_t s_hash_seed[4] // Bytes 237-252
+    uint32_t s_hash_seed[4]; // Bytes 237-252
     uint8_t s_def_hash_version; // Bytes 253
     uint8_t padding[3]; // Bytes 254-256
 
@@ -67,7 +64,23 @@ struct Superblock {
     uint32_t s_default_mount_options; // Bytes 257-260
     uint32_t s_first_meta_bg; // Bytes 261-264
     uint8_t unused[760]; // Bytes 264-1024
+};
 
+struct BGDT {
+    uint32_t bg_block_bitmap; // Bytes 0-4
+    uint32_t bg_inode_bitmap; // Bytes 5-8
+    uint32_t bg_inode_table; // Bytes 9-12
+    uint16_t bg_free_blocks_count; // Bytes 13-14
+    uint16_t bg_free_inodes_count; // Bytes 15-16
+    uint16_t bg_used_dirs_count; // Bytes 17-18
+    uint16_t bg_pad; // Bytes 19-20
+    uint8_t bg_reserved[12]; // Bytes 21-32
+};
+
+struct Ext2File {
+    PartitionFile* partitionFile;
+    Superblock* superBlock;
+    BGDT* bgdt;
 };
 
 struct Ext2File *ext2Open(char *fn, int32_t pNum);

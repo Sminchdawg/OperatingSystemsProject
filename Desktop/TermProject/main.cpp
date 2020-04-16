@@ -2,6 +2,7 @@
 #include "DisplayBuffer.h"
 #include "VDIFile.h"
 #include "PartitionFile.h"
+#include "Ext2File.h"
 #include <iomanip>
 
 using namespace std;
@@ -9,9 +10,9 @@ using namespace std;
 int main()
 {
     uint8_t* pageBuffer = new uint8_t[1024];
-    VDIFile *f = vdiOpen("/home/csis/5806.public/Test-dynamic-1k.vdi");
+    // VDIFile *f = vdiOpen("/home/csis/5806.public/Test-dynamic-1k.vdi");
 
-
+    /*
     PartitionEntry partitionEntry[4];
     vdiSeek(f, 446, SEEK_CUR);
     vdiRead(f, partitionEntry, 64);
@@ -24,8 +25,11 @@ int main()
 
     // Temp hack
     vdiSeek(f, -446, SEEK_CUR);
+    */
 
-    PartitionFile* partitionFile = partitionOpen(f, partitionEntry[0]);
+    Ext2File* f = ext2Open("/home/csis/5806.public/Test-dynamic-1k.vdi", -1);
+    // printf("%d", f->superBlock->s_blocks_count);
+    ext2Close(f);
 
     /*
     Write stuff
@@ -42,7 +46,7 @@ int main()
     partitionClose(partitionFile);
     */
 
-    displaySuperBlock();
+    // displaySuperBlock();
 
     return 0;
 }

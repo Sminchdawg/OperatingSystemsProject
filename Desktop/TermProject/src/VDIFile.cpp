@@ -88,12 +88,15 @@ ssize_t vdiRead(struct VDIFile *f, void *buf, size_t count) {
         cout << "OffData: " << f->header->offData << endl;
         cout << "Cursor of fd: " << something << endl;
         */
+        // cout << f -> fd << endl;
+        // cout << buf << endl;
+        // cout << bytesToRead << endl;
         int misterReed = read(f -> fd, buf, bytesToRead);
 
        // Check to see if there was an error in trying to read
        if (misterReed == -1) {
             bytesRead = -1;
-            cout << "There was an error reading the file";
+            // cout << "There was an error reading the file";
             break;
        }
 
