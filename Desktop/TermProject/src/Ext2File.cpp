@@ -25,8 +25,6 @@ struct Ext2File *ext2Open(char *fn, int32_t pNum) {
         chosenPartitionEntry = partitionEntry[pNum];
     }
 
-
-
     // Temp hack
     vdiSeek(f, -446, SEEK_CUR);
 
@@ -37,8 +35,7 @@ struct Ext2File *ext2Open(char *fn, int32_t pNum) {
     ext2File->num_block_groups = ext2File->superBlock->s_blocks_count / ext2File->superBlock->s_blocks_per_group;
     ext2File->bgdt->blockGroups = new Blockgroup[ext2File->num_block_groups];
 
-
-    read = partitionRead(ext2File->partitionFile, ext2File->bgdt, 32);
+    read = partitionRead(ext2File->partitionFile, ext2File->bgdt, ext2File->num_block_groups * 32);
 
     // ext2File -> partitionRead(ext2File -> PartitionFile, pageBuffer, 32);
     // Populate all of the fields of your strcture and return a pointer to it.

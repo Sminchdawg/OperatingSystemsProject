@@ -4,6 +4,7 @@
 #include <iomanip>
 #include "VDIFile.h"
 #include "PartitionFile.h"
+#include "cmath";
 
 struct Superblock {
     uint32_t s_inodes_count; // Bytes 0-4
