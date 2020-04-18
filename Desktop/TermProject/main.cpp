@@ -32,11 +32,14 @@ int main()
     // fetchBlock(f, 1, pageBuffer);
     // displayBuffer(pageBuffer, 1024, 0);
     // writeBlock(f, 5, pageBuffer);
-    fetchBlock(f, 5, pageBuffer);
-    displayBuffer(pageBuffer, 1024, 0);
+    // fetchBlock(f, 2, pageBuffer);
+    // displayBuffer(pageBuffer, 256, 0);
     // displayBGDT(f);
+    struct Superblock* superblock = new Superblock;
+    cout << f->superBlock->s_blocks_per_group;
+    fetchSuperblock(f, 16 * 9, superblock);
+    displaySuperBlock(f->superBlock);
     ext2Close(f);
-
     /*
     Write stuff
     PartitionFile* partitionFile = partitionOpen(f, partitionEntry[0]);

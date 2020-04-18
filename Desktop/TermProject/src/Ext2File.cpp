@@ -90,7 +90,7 @@ int32_t fetchSuperblock(struct Ext2File *f, uint32_t blockNum, struct Superblock
     }
 
     if (blockNum == 0) {
-        int spySeek = partitionSeek(f -> partitionFile, 1024, SEEK_CUR);
+        int spySeek = partitionSeek(f->partitionFile, 1024, SEEK_CUR);
         cout << "Super block cursor: " << f->partitionFile->vdiFile->cursor << endl;
         int mistaRead = partitionRead(f -> partitionFile, sb, 1024);
 
@@ -99,7 +99,7 @@ int32_t fetchSuperblock(struct Ext2File *f, uint32_t blockNum, struct Superblock
             return -1;
         }
     } else {
-        // fetchBlock();
+        fetchBlock(f, blockNum, sb);
     }
 
     f->superBlock = sb;
@@ -123,8 +123,15 @@ int32_t writeSuperblock(struct Ext2File *f, uint32_t blockNum, struct Ext2Superb
         return -1;
     }
 
-   partitionSeek(f->partitionFile, 80085, SEEK_CUR);
-   partitionWrite(f->partitionFile, f->superBlock, 1024);
+   int spySeek = partitionSeek(f->partitionFile, blockNum * f->file_system_block_size, SEEK_CUR);
+   int mistaWrite = partitionWrite(f->partitionFile, sb, 1024);
+
+   if (spySeek == -1 || mistaWrite == -1) {
+        cout << "Spy or write has failed in Ext2File for the write block" << endl;
+        return -1;
+    }
+
+    return 0;
 }
 
 void displaySuperBlock(struct Superblock* superblock) {
