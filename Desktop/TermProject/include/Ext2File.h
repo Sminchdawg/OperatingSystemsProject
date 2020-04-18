@@ -94,11 +94,12 @@ struct Ext2File *ext2Open(char *fn, int32_t pNum);
 void ext2Close(struct Ext2File *f);
 int32_t fetchBlock(struct Ext2File * f, uint32_t blockNum, void *buf);
 int32_t writeBlock(struct Ext2File *f, uint32_t blockNum, void *buf);
-int32_t fetchSuperblock(struct Ext2File *f, uint32_t blockNum, struct Ext2Superblock *sb);
-int32_t writeSuperblock(struct Ext2File *f, uint32_t blockNum, struct Ext2Superblock *sb);
+int32_t fetchSuperblock(struct Ext2File *f, uint32_t blockNum, struct Superblock *sb);
+int32_t writeSuperblock(struct Ext2File *f, uint32_t blockNum, struct Superblock *sb);
 void displaySuperBlock(struct Superblock* superblock);
-int32_t fetchBGDT(struct Ext2File *f, uint32_t blockNum, struct Ext2BlockGRoupDescriptor *bgdt);
-int32_t writeBGDT(struct Ext2File *f, uint32_t blockNum, struct Ext2BlockGroupDescriptor *bgdt);
+int32_t fetchBGDT(struct Ext2File *f, uint32_t blockNum, struct BGDT *bgdt);
+int32_t writeBGDT(struct Ext2File *f, uint32_t blockNum, struct BGDT *bgdt);
 void displayBGDT(struct Ext2File *f);
+int32_t checkValidBlockNum(struct Ext2File* ext2File ,int blockNum);
 // void formatText(string text, string format, data);
 #endif // EXT2FILE_H

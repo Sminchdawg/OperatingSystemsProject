@@ -28,10 +28,13 @@ int main()
     */
 
     Ext2File* f = ext2Open("/home/csis/5806.public/Test-fixed-1k.vdi", -1);
-    displaySuperBlock(f->superBlock);
-    cout << endl;
-    displayBGDT(f);
-    // printf("%d", f->superBlock->s_blocks_count);
+    // displaySuperBlock(f->superBlock);
+    // fetchBlock(f, 1, pageBuffer);
+    // displayBuffer(pageBuffer, 1024, 0);
+    // writeBlock(f, 5, pageBuffer);
+    fetchBlock(f, 5, pageBuffer);
+    displayBuffer(pageBuffer, 1024, 0);
+    // displayBGDT(f);
     ext2Close(f);
 
     /*

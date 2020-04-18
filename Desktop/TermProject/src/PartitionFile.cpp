@@ -47,6 +47,7 @@ off_t partitionSeek(struct PartitionFile *f,off_t offset,int anchor) {
     // Operates the same as vdiSeek().  Restrict the function so that the cursor remains un-changed if a location outside the partition is requested
     // f -> cursor = f -> vdiFile -> cursor;
     uint64_t newCursor = 0;
+    vdiSeek(f->vdiFile, newCursor, SEEK_SET);
 
     if (!newCursor < f -> partitionStart || !newCursor > f -> partitionSize + f -> partitionStart) {
         newCursor = vdiSeek(f-> vdiFile, f -> partitionStart + offset, SEEK_CUR);
