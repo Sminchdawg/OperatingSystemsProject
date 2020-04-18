@@ -35,7 +35,7 @@ struct Ext2File *ext2Open(char *fn, int32_t pNum) {
 
     struct BGDT* bgdt = new BGDT;
     fetchBGDT(ext2File, 0, bgdt);
-    displayBGDT(ext2File);
+    ext2File->bgdt = bgdt;
 
     // Populate all of the fields of your strcture and return a pointer to it.
     return ext2File;
@@ -222,6 +222,7 @@ void displaySuperBlock(struct Superblock* superblock) {
     printf("%d\n", superblock->s_first_meta_bg);
 }
 
+
 // Block group descriptor table functions
 
 int32_t fetchBGDT(struct Ext2File *f, uint32_t blockNum, struct BGDT *bgdt) {
@@ -236,19 +237,14 @@ int32_t fetchBGDT(struct Ext2File *f, uint32_t blockNum, struct BGDT *bgdt) {
             cout << "Spy or read has failed in Ext2File for the BGDT" << endl;
             return -1;
         }
-
-        f->bgdt->blockGroups = bgdt->blockGroups;
     } else {
-    /*
-        int spySeek = partitionSeek(f->partitionFile,
-            (((f->superBlock->s_blocks_per_group * blockNum) + f->superBlock->s_first_data_block) * f->file_system_block_size) + 1024,
-             SEEK_CUR);
-     */
 
-         int spySeek = partitionSeek(f->partitionFile, (8193 * f->file_system_block_size) + 1024, SEEK_CUR);
+         int spySeek = partitionSeek(f->partitionFile,
+         ((blockNum * f->superBlock->s_blocks_per_group) + f->superBlock->s_first_data_block)  * f->file_system_block_size + f->file_system_block_size,
+         SEEK_CUR);
 
-             cout << "BGDT cursor: " << f->partitionFile->vdiFile->cursor << endl;
         int mistaRead = partitionRead(f->partitionFile, bgdt->blockGroups, 32 * f->num_block_groups);
+
         if (spySeek == -1 || mistaRead == -1) {
             cout << "Spy or read has failed in Ext2File for the BGDT" << endl;
             return -1;
@@ -275,25 +271,25 @@ int32_t writeBGDT(struct Ext2File *f, uint32_t blockNum, struct BGDT *bgdt) {
     return 0;
 }
 
-void displayBGDT(struct Ext2File *f) {
+void displayBGDT(int num_block_groups, struct BGDT* bgdt) {
     // Display the values in the block group descriptor table.
     cout << "Block group descriptor table: " << endl;
     cout << "Block  " << "Block  " << "Inode  " << "Inode  " << "Free   " << "Free   " << "Used  " << endl;
     cout << "Number " << "Bitmap " << "Bitmap " << "Table  " << "Blocks " << "Inodes " << "Dirs  " << endl;
     cout << "------ " << "------ " << "------ " << "-----  " << "------ " << "------ " << "----  " << endl;
-    for (int i = 0; i < f->num_block_groups; i++) {
+    for (int i = 0; i < num_block_groups; i++) {
         cout << i << "       ";
-        printf("%d", f->bgdt->blockGroups[i].bg_block_bitmap);
+        printf("%d", bgdt->blockGroups[i].bg_block_bitmap);
         cout << "     ";
-        printf("%d", f->bgdt->blockGroups[i].bg_inode_bitmap);
+        printf("%d", bgdt->blockGroups[i].bg_inode_bitmap);
         cout << "     ";
-        printf("%d", f->bgdt->blockGroups[i].bg_inode_table);
+        printf("%d", bgdt->blockGroups[i].bg_inode_table);
         cout << "     ";
-        printf("%d", f->bgdt->blockGroups[i].bg_free_blocks_count);
+        printf("%d", bgdt->blockGroups[i].bg_free_blocks_count);
         cout << "     ";
-        printf("%d", f->bgdt->blockGroups[i].bg_free_inodes_count);
+        printf("%d", bgdt->blockGroups[i].bg_free_inodes_count);
         cout << "     ";
-        printf("%d", f->bgdt->blockGroups[i].bg_used_dirs_count);
+        printf("%d", bgdt->blockGroups[i].bg_used_dirs_count);
         cout << endl;
     }
 }

@@ -99,7 +99,7 @@ int32_t writeSuperblock(struct Ext2File *f, uint32_t blockNum, struct Superblock
 void displaySuperBlock(struct Superblock* superblock);
 int32_t fetchBGDT(struct Ext2File *f, uint32_t blockNum, struct BGDT *bgdt);
 int32_t writeBGDT(struct Ext2File *f, uint32_t blockNum, struct BGDT *bgdt);
-void displayBGDT(struct Ext2File *f);
+void displayBGDT(int num_block_groups, struct BGDT* bgdt);
 int32_t checkValidBlockNum(struct Ext2File* ext2File ,int blockNum);
 // void formatText(string text, string format, data);
 #endif // EXT2FILE_H

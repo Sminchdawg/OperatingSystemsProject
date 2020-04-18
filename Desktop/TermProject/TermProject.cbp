@@ -36,10 +36,12 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="include/DisplayBuffer.h" />
+		<Unit filename="include/Ext2File.h" />
 		<Unit filename="include/PartitionFile.h" />
 		<Unit filename="include/VDIFile.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/DisplayBuffer.cpp" />
+		<Unit filename="src/Ext2File.cpp" />
 		<Unit filename="src/PartitionFile.cpp" />
 		<Unit filename="src/VDIFile.cpp" />
 		<Extensions>
