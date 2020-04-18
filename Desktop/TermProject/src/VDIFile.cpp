@@ -54,7 +54,7 @@ off_t vdiSeek(VDIFile *f, off_t offset, int anchor) {
     if (newLocation >= 0 && newLocation < f -> header -> cbDisk) {
         f -> cursor = newLocation;
     } else {
-        cout << "The cursor was moved out of the disk space";
+        cout << "The cursor was moved out of the disk space" << endl;
         return -1; // If the cursor is moved out of the diskSpace, we must fail
     }
 

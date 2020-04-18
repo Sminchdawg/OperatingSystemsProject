@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1587172603 source:/home/csis/Desktop/TermProject/main.cpp
+1587179646 source:/home/csis/Desktop/TermProject/main.cpp
 	<iostream>
 	"DisplayBuffer.h"
 	"VDIFile.h"
@@ -19,7 +19,7 @@
 	"DisplayBuffer.h"
 	<iostream>
 
-1587167582 source:/home/csis/Desktop/TermProject/src/VDIFile.cpp
+1587175959 source:/home/csis/Desktop/TermProject/src/VDIFile.cpp
 	"VDIFile.h"
 	<iostream>
 
@@ -48,6 +48,6 @@
 	"PartitionFile.h"
 	"cmath"
 
-1587172870 source:/home/csis/Desktop/TermProject/src/Ext2File.cpp
+1587178882 source:/home/csis/Desktop/TermProject/src/Ext2File.cpp
 	"Ext2File.h"
 

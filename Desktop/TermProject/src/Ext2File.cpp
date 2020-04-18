@@ -32,8 +32,10 @@ struct Ext2File *ext2Open(char *fn, int32_t pNum) {
     fetchSuperblock(ext2File, 0, superblock);
 
     // Gets BGD
+
     struct BGDT* bgdt = new BGDT;
     fetchBGDT(ext2File, 0, bgdt);
+    displayBGDT(ext2File);
 
     // Populate all of the fields of your strcture and return a pointer to it.
     return ext2File;
@@ -49,11 +51,9 @@ void ext2Close(struct Ext2File *f) {
 int32_t fetchBlock(struct Ext2File * f, uint32_t blockNum, void *buf) {
     // Read the given block number from the file system into the buffer.
     // Return 0 if successful, some other value if the write fails.
-    if (checkValidBlockNum(f, blockNum) != 0) {
-        return -1;
-    }
 
     int spySeek = partitionSeek(f->partitionFile, blockNum * f->file_system_block_size, SEEK_CUR);
+    cout << "Fetch block curse her: " << f->partitionFile->vdiFile->cursor << endl;
     int mistaRead = partitionRead(f->partitionFile, buf, f->file_system_block_size);
 
     if (spySeek == -1 || mistaRead == -1) {
@@ -67,9 +67,6 @@ int32_t fetchBlock(struct Ext2File * f, uint32_t blockNum, void *buf) {
 int32_t writeBlock(struct Ext2File *f, uint32_t blockNum, void *buf) {
     // Write the buffer to the given block in the file system.
     // Return 0 if successful, some other value if the write fails.
-    if (checkValidBlockNum(f, blockNum) != 0) {
-        return -1;
-    }
 
     int spySeek = partitionSeek(f->partitionFile, blockNum * f->file_system_block_size, SEEK_CUR);
     int mistaWrite = partitionWrite(f->partitionFile, buf, f->file_system_block_size);
@@ -85,30 +82,26 @@ int32_t writeBlock(struct Ext2File *f, uint32_t blockNum, void *buf) {
 // Superblock functions
 int32_t fetchSuperblock(struct Ext2File *f, uint32_t blockNum, struct Superblock *sb) {
     // Read the superblock found in the given block number from the file system into the buffer.
-    if (checkValidBlockNum(f, blockNum) != 0) {
-        return -1;
-    }
 
     if (blockNum == 0) {
         int spySeek = partitionSeek(f->partitionFile, 1024, SEEK_CUR);
-        cout << "Super block cursor: " << f->partitionFile->vdiFile->cursor << endl;
         int mistaRead = partitionRead(f -> partitionFile, sb, 1024);
 
         if (spySeek == -1 || mistaRead == -1) {
             cout << "Spy or read has failed in Ext2File for the superblock" << endl;
             return -1;
         }
-    } else {
-        fetchBlock(f, blockNum, sb);
-    }
 
-    f->superBlock = sb;
-    f->num_block_groups = ceil((float)f->superBlock->s_blocks_count / (float)f->superBlock->s_blocks_per_group);
-    f->bgdt->blockGroups = new Blockgroup[f->num_block_groups];
-    if (f->superBlock->s_log_block_size == 0) {
-       f->file_system_block_size = 1024;
+        f->superBlock = sb;
+        f->num_block_groups = ceil((float)f->superBlock->s_blocks_count / (float)f->superBlock->s_blocks_per_group);
+        f->bgdt->blockGroups = new Blockgroup[f->num_block_groups];
+        if (f->superBlock->s_log_block_size == 0) {
+           f->file_system_block_size = 1024;
+        } else {
+            f->file_system_block_size = pow(f->superBlock->s_log_block_size, 2);
+        }
     } else {
-        f->file_system_block_size = pow(f->superBlock->s_log_block_size, 2);
+        fetchBlock(f, blockNum * f->superBlock->s_blocks_per_group + f->superBlock->s_first_data_block, sb);
     }
 
     // Return 0 for success, non-zero forfailure
@@ -119,9 +112,6 @@ int32_t fetchSuperblock(struct Ext2File *f, uint32_t blockNum, struct Superblock
 int32_t writeSuperblock(struct Ext2File *f, uint32_t blockNum, struct Ext2Superblock *sb) {
    // Write the superblock to the given block.
    // Return 0 for success, non-zero for failure.
-   if (checkValidBlockNum(f, blockNum) != 0) {
-        return -1;
-    }
 
    int spySeek = partitionSeek(f->partitionFile, blockNum * f->file_system_block_size, SEEK_CUR);
    int mistaWrite = partitionWrite(f->partitionFile, sb, 1024);
@@ -236,36 +226,53 @@ void displaySuperBlock(struct Superblock* superblock) {
 
 int32_t fetchBGDT(struct Ext2File *f, uint32_t blockNum, struct BGDT *bgdt) {
     // Read the block group descriptor table that begins at the given block number.
-    if (checkValidBlockNum(f, blockNum) != 0) {
-        return -1;
-    }
 
     bgdt->blockGroups = new Blockgroup[f->num_block_groups];
     if (blockNum == 0) {
         int spySeek = partitionSeek(f->partitionFile, 2048, SEEK_CUR);
-        cout << "fetchBGDT Curosr:" << f->partitionFile->vdiFile->cursor << endl;
         int mistaRead = partitionRead(f->partitionFile, bgdt->blockGroups, 32 * f->num_block_groups);
 
         if (spySeek == -1 || mistaRead == -1) {
             cout << "Spy or read has failed in Ext2File for the BGDT" << endl;
             return -1;
         }
+
+        f->bgdt->blockGroups = bgdt->blockGroups;
     } else {
-        // fetchBlock();
+    /*
+        int spySeek = partitionSeek(f->partitionFile,
+            (((f->superBlock->s_blocks_per_group * blockNum) + f->superBlock->s_first_data_block) * f->file_system_block_size) + 1024,
+             SEEK_CUR);
+     */
+
+         int spySeek = partitionSeek(f->partitionFile, (8193 * f->file_system_block_size) + 1024, SEEK_CUR);
+
+             cout << "BGDT cursor: " << f->partitionFile->vdiFile->cursor << endl;
+        int mistaRead = partitionRead(f->partitionFile, bgdt->blockGroups, 32 * f->num_block_groups);
+        if (spySeek == -1 || mistaRead == -1) {
+            cout << "Spy or read has failed in Ext2File for the BGDT" << endl;
+            return -1;
+        }
     }
 
-    f->bgdt->blockGroups = bgdt->blockGroups;
     // Store the table in the array pointed to by bgdt.
     // Return 0 for success, non-zero for failure.
     return 0;
 }
 
-int32_t writeBGDT(struct Ext2File *f, uint32_t blockNum, struct Ext2BlockGroupDescriptor *bgdt) {
+int32_t writeBGDT(struct Ext2File *f, uint32_t blockNum, struct BGDT *bgdt) {
     // Write the block group descriptor table to the file system starting at the given block number.
     // Return 0 for success, non-zero for failure.
-    if (checkValidBlockNum(f, blockNum) != 0) {
+
+   int spySeek = partitionSeek(f->partitionFile, blockNum * f->file_system_block_size, SEEK_CUR);
+   int mistaWrite = partitionWrite(f->partitionFile, bgdt->blockGroups, 32 * f->num_block_groups);
+
+   if (spySeek == -1 || mistaWrite == -1) {
+        cout << "Spy or write has failed in Ext2File for the write block" << endl;
         return -1;
     }
+
+    return 0;
 }
 
 void displayBGDT(struct Ext2File *f) {
@@ -288,14 +295,5 @@ void displayBGDT(struct Ext2File *f) {
         cout << "     ";
         printf("%d", f->bgdt->blockGroups[i].bg_used_dirs_count);
         cout << endl;
-    }
-}
-
-int32_t checkValidBlockNum(struct Ext2File* ext2File ,int blockNum) {
-    if (blockNum > ext2File->num_block_groups) {
-        cout << "That is greater than the number of blocks in this file";
-        return -1;
-    } else {
-        return 0;
     }
 }
