@@ -47,6 +47,7 @@ int32_t inodeInUse(struct Ext2File *f, uint32_t iNum) {
     int blockNum = floor((float)iNumIndex / (float)iNodesPerBlock) + f->bgdt->blockGroups[blockGroup].bg_inode_table;
     fetchBlock(f, f->bgdt->blockGroups[blockGroup].bg_inode_bitmap, bitMap);
 
+    cout << (1 << bitMap[iNum]) << endl;
     if (bitMap[iNum] == 0) {
         return false;
     } else {
@@ -57,6 +58,25 @@ int32_t inodeInUse(struct Ext2File *f, uint32_t iNum) {
 uint32_t allocateInode(struct Ext2File *f, int32_t group) {
     // Select any unmarked inode in the given block group, mark it as allocated and return its inode number
     // If the group is -1, the select any available inode fromany group
+    uint32_t iNum;
+    bool notfound;
+    int loop = 0;
+    uint8_t* bitMap = new uint8_t[1024];
+
+    if (group == -1) {
+        while(notFound && loop < f->num_block_groups) {
+            fetchBlock(f, f->bgdt->blockGroups[group], bitMap);
+            // Loop through entries in bitMap and find first one that has 0 value.
+            // Set to allocated, and return the index
+            loop++;
+        }
+    } else {
+        fetchBlock(f, f->bgdt->blockGroups[group], bitMap);
+        // Loop through entries in bitMap and find first one that has 0 value.
+        // Set to allocated, and return the index
+    }
+
+    return iNum;
 }
 
 int32_t freeInode(struct Ext2File *f, uint32_t iNum) {
@@ -68,7 +88,10 @@ int32_t freeInode(struct Ext2File *f, uint32_t iNum) {
     int blockNum = floor((float)iNumIndex / (float)iNodesPerBlock) + f->bgdt->blockGroups[blockGroup].bg_inode_table;
 
     fetchBlock(f, blockNum, bitMap);
+    cout << "bitmap inum: ";
+    printf("%d\n", bitMap[iNum]);
     bitMap[iNum] = 0;
+    cout << "bitmap inum: " << bitMap[iNum] << endl;
     writeBlock(f, blockNum, bitMap);
 
     return 0;
