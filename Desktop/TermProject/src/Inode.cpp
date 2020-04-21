@@ -4,36 +4,79 @@ using namespace std;
 
 int32_t fetchInode(struct Ext2File *f, uint32_t iNum, struct Inode *buf) {
     // Read the inode whose index number is iNum and store the information in the buffer
-    int iNodesPerGroup = f->file_system_block_size / f->superBlock->s_inode_size;
+    int iNodesPerBlock = f->file_system_block_size / f->superBlock->s_inode_size;
     int blockGroup = floor(((float)iNum - 1) / ((float)f->superBlock->s_inodes_per_group));
-    int iNumIndex = iNum - (blockGroup * f->superBlock->s_inodes_per_group);
-    // int blockNum = f->bgdt->blockGroups[blockGroup].bg_inode_table + floor((float)(iNumIndex * f->superBlock->s_inode_size) / (float)f->file_system_block_size);
-    int blockNum = f->bgdt->blockGroups[blockGroup].bg_inode_table + floor((float)(iNumIndex * f->superBlock->s_inode_size) / (float)f->file_system_block_size);
-    cout << "block num: " << blockNum << endl;
     cout << "block group: " << blockGroup << endl;
-    Inode* iNodes;
-    iNodes = new Inode[iNodesPerGroup];
-    fetchBlock(f, blockNum + 1, iNodes);
-    cout << iNumIndex % iNodesPerGroup << endl;
-    *buf = iNodes[iNumIndex % iNodesPerGroup];
+    int iNumIndex = (iNum -1) % f->superBlock->s_inodes_per_group;
+    cout << "inum index: " <<  iNumIndex << endl;
+    int blockNum = floor((float)iNumIndex / (float)iNodesPerBlock) + f->bgdt->blockGroups[blockGroup].bg_inode_table;
+    cout << "block num: " << blockNum  << endl;
+    iNumIndex = iNumIndex % iNodesPerBlock;
+    cout << "inum index: " <<  iNumIndex << endl;
 
+
+    Inode* iNodes;
+    iNodes = new Inode[iNodesPerBlock];
+    fetchBlock(f, blockNum, iNodes);
+    *buf = iNodes[iNumIndex];
+
+    return 0;
 }
 
 int32_t writeInode(struct Ext2File *f, uint32_t iNum, struct Inode *buf) {
     // Write the inode whose index number is Inum from the given buffer
+    int iNodesPerBlock = f->file_system_block_size / f->superBlock->s_inode_size;
+    int blockGroup = floor(((float)iNum - 1) / ((float)f->superBlock->s_inodes_per_group));
+    int iNumIndex = (iNum -1) % f->superBlock->s_inodes_per_group;
+    int blockNum = floor((float)iNumIndex / (float)iNodesPerBlock) + f->bgdt->blockGroups[blockGroup].bg_inode_table;
+    iNumIndex = iNumIndex % iNodesPerBlock;
+
+    Inode* iNodes;
+    iNodes = new Inode[iNodesPerBlock];
+    fetchBlock(f, blockNum, iNodes);
+    iNodes[iNumIndex] = *buf;
+    writeBlock(f, blockNum, iNodes);
 }
 
 int32_t inodeInUse(struct Ext2File *f, uint32_t iNum) {
-    // Returns 0 if the inode is marked as allocated and not-zero if its not marked
+    // Returns turn if the inode is marked as allocated and not false if its not marked
+    uint8_t* bitMap = new uint8_t[1024];
+    int iNodesPerBlock = f->file_system_block_size / f->superBlock->s_inode_size;
+    int blockGroup = floor(((float)iNum - 1) / ((float)f->superBlock->s_inodes_per_group));
+    int iNumIndex = (iNum -1) % f->superBlock->s_inodes_per_group;
+    int blockNum = floor((float)iNumIndex / (float)iNodesPerBlock) + f->bgdt->blockGroups[blockGroup].bg_inode_table;
+    fetchBlock(f, f->bgdt->blockGroups[blockGroup].bg_inode_bitmap, bitMap);
+
+    if (bitMap[iNum] == 0) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+uint32_t allocateInode(struct Ext2File *f, int32_t group) {
+    // Select any unmarked inode in the given block group, mark it as allocated and return its inode number
+    // If the group is -1, the select any available inode fromany group
 }
 
 int32_t freeInode(struct Ext2File *f, uint32_t iNum) {
     // Marks the given inode as free
+    uint8_t* bitMap = new uint8_t[1024];
+    int iNodesPerBlock = f->file_system_block_size / f->superBlock->s_inode_size;
+    int blockGroup = floor(((float)iNum - 1) / ((float)f->superBlock->s_inodes_per_group));
+    int iNumIndex = (iNum -1) % f->superBlock->s_inodes_per_group;
+    int blockNum = floor((float)iNumIndex / (float)iNodesPerBlock) + f->bgdt->blockGroups[blockGroup].bg_inode_table;
+
+    fetchBlock(f, blockNum, bitMap);
+    bitMap[iNum] = 0;
+    writeBlock(f, blockNum, bitMap);
+
+    return 0;
 }
 
 void displayInode(struct Inode* iNode) {
     cout << "Mode: ";
-    printf("%d\n", iNode->i_mode);
+    printf("%o\n", iNode->i_mode);
     cout << "Size: ";
     printf("%d\n", iNode->i_size);
     cout << "Blocks: ";

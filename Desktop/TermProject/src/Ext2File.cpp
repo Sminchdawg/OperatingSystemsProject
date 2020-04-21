@@ -52,9 +52,7 @@ int32_t fetchBlock(struct Ext2File * f, uint32_t blockNum, void *buf) {
     // Read the given block number from the file system into the buffer.
     // Return 0 if successful, some other value if the write fails.
 
-    cout << "Fetch block cursor before seek: " << f->partitionFile->vdiFile->cursor << endl;
     int spySeek = partitionSeek(f->partitionFile, blockNum * f->file_system_block_size, SEEK_CUR);
-    cout << "Fetch block cursor: " << f->partitionFile->vdiFile->cursor << endl;
     int mistaRead = partitionRead(f->partitionFile, buf, f->file_system_block_size);
 
     if (spySeek == -1 || mistaRead == -1) {
