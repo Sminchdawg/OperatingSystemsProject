@@ -1,0 +1,119 @@
+# depslib dependency file v1.0
+1587521833 source:/home/csis/Desktop/TermProject/main.cpp
+	<iostream>
+	"DisplayBuffer.h"
+	"VDIFile.h"
+	"PartitionFile.h"
+	"Ext2File.h"
+	"Inode.h"
+	<iomanip>
+
+1582595019 /home/csis/Desktop/TermProject/include/DisplayBuffer.h
+	<cstdint>
+
+1582594444 /home/csis/Desktop/TermProject/include/VDIFile.h
+	<cstdint>
+	<unistd.h>
+	<fcntl.h>
+
+1586626386 source:/home/csis/Desktop/TermProject/src/DisplayBuffer.cpp
+	"DisplayBuffer.h"
+	<iostream>
+
+1587435682 source:/home/csis/Desktop/TermProject/src/VDIFile.cpp
+	"VDIFile.h"
+	<iostream>
+
+1581347956 source:/home/csis/Desktop/TermProject/include/DisplayBuffer.h.cpp
+	<cstdint>
+
+1581288251 source:/home/csis/Desktop/TermProject/include/VDIFile.h.cpp
+	<cstdint>
+	<unistd.h>
+	<fcntl.h>
+
+1587241865 source:/home/csis/Desktop/TermProject/src/PartitionFile.cpp
+	"PartitionFile.h"
+	"VDIFile.h"
+	<iostream>
+
+1582722465 /home/csis/Desktop/TermProject/include/PartitionFile.h
+	"VDIFile.h"
+	<iostream>
+	<iomanip>
+
+1587234341 /home/csis/Desktop/TermProject/include/Ext2File.h
+	<iostream>
+	<iomanip>
+	"VDIFile.h"
+	"PartitionFile.h"
+	"cmath"
+
+1587434167 source:/home/csis/Desktop/TermProject/src/Ext2File.cpp
+	"Ext2File.h"
+
+1587518654 /home/csis/Desktop/TermProject/include/Inode.h
+	<iostream>
+	<iomanip>
+	<Ext2File.h>
+	"cmath"
+	<bitset>
+
+1587521924 source:/home/csis/Desktop/TermProject/src/Inode.cpp
+	"Inode.h"
+
+1587522894 source:/home/csis/Desktop/TermProjectBackup/main.cpp
+	<iostream>
+	"DisplayBuffer.h"
+	"VDIFile.h"
+	"PartitionFile.h"
+	"Ext2File.h"
+	"Inode.h"
+	<iomanip>
+
+1587522894 /home/csis/Desktop/TermProjectBackup/include/DisplayBuffer.h
+	<cstdint>
+
+1587522894 /home/csis/Desktop/TermProjectBackup/include/VDIFile.h
+	<cstdint>
+	<unistd.h>
+	<fcntl.h>
+
+1587522894 /home/csis/Desktop/TermProjectBackup/include/PartitionFile.h
+	"VDIFile.h"
+	<iostream>
+	<iomanip>
+
+1587522894 /home/csis/Desktop/TermProjectBackup/include/Ext2File.h
+	<iostream>
+	<iomanip>
+	"VDIFile.h"
+	"PartitionFile.h"
+	"cmath"
+
+1587522894 /home/csis/Desktop/TermProjectBackup/include/Inode.h
+	<iostream>
+	<iomanip>
+	<Ext2File.h>
+	"cmath"
+	<bitset>
+
+1587522894 source:/home/csis/Desktop/TermProjectBackup/src/DisplayBuffer.cpp
+	"DisplayBuffer.h"
+	<iostream>
+
+1587522894 source:/home/csis/Desktop/TermProjectBackup/src/Ext2File.cpp
+	"Ext2File.h"
+
+1587522894 source:/home/csis/Desktop/TermProjectBackup/src/Inode.cpp
+	"Inode.h"
+
+1587522894 source:/home/csis/Desktop/TermProjectBackup/src/PartitionFile.cpp
+	"PartitionFile.h"
+	"VDIFile.h"
+	<iostream>
+
+1587522894 source:/home/csis/Desktop/TermProjectBackup/src/VDIFile.cpp
+	"VDIFile.h"
+	<iostream>
+

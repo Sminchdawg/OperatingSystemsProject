@@ -31,6 +31,7 @@ int32_t fetchInode(struct Ext2File *f, uint32_t iNum, struct Inode *buf);
 int32_t writeInode(struct Ext2File *f, uint32_t iNum, struct Inode *buf);
 int32_t inodeInUse(struct Ext2File *f, uint32_t iNum);
 int32_t freeInode(struct Ext2File *f, uint32_t iNum);
+uint32_t allocateInode(struct Ext2File *f, int32_t group);
 void displayInode(struct Inode* inode);
 
 #endif // INODE_H
