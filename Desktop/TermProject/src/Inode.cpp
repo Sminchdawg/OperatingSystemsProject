@@ -47,12 +47,14 @@ int32_t inodeInUse(struct Ext2File *f, uint32_t iNum) {
     int blockNum = floor((float)iNumIndex / (float)iNodesPerBlock) + f->bgdt->blockGroups[blockGroup].bg_inode_table;
     fetchBlock(f, f->bgdt->blockGroups[blockGroup].bg_inode_bitmap, bitMap);
 
-    cout << (1 << bitMap[iNum]) << endl;
-    if (bitMap[iNum] == 0) {
-        return false;
-    } else {
-        return true;
+    for (int i = 0; i < 8; i++) {
+        if (bitMap[iNum] & (1 << (i - 1))) {
+            return true;
+        } else {
+            cout << "gay";
+        }
     }
+    return false;
 }
 
 uint32_t allocateInode(struct Ext2File *f, int32_t group) {
@@ -63,6 +65,7 @@ uint32_t allocateInode(struct Ext2File *f, int32_t group) {
     int loop = 0;
     uint8_t* bitMap = new uint8_t[1024];
 
+    /*
     if (group == -1) {
         while(notFound && loop < f->num_block_groups) {
             fetchBlock(f, f->bgdt->blockGroups[group], bitMap);
@@ -75,6 +78,7 @@ uint32_t allocateInode(struct Ext2File *f, int32_t group) {
         // Loop through entries in bitMap and find first one that has 0 value.
         // Set to allocated, and return the index
     }
+    */
 
     return iNum;
 }
@@ -88,10 +92,26 @@ int32_t freeInode(struct Ext2File *f, uint32_t iNum) {
     int blockNum = floor((float)iNumIndex / (float)iNodesPerBlock) + f->bgdt->blockGroups[blockGroup].bg_inode_table;
 
     fetchBlock(f, blockNum, bitMap);
-    cout << "bitmap inum: ";
-    printf("%d\n", bitMap[iNum]);
-    bitMap[iNum] = 0;
-    cout << "bitmap inum: " << bitMap[iNum] << endl;
+
+    uint8_t emptyByte = 0;
+    bitMap[iNum] = emptyByte;
+/*
+    for (int i = 0; i < 8; i++) {
+        if (bitMap[iNum] & (1 << (i - 1))) {
+            cout  << "allocated" << endl;
+        } else {
+            cout << "empty" << endl;
+        }
+    }
+
+    for (int i = 0; i < 8; i++) {
+        if (emptyByte & (1 << (i - 1))) {
+            cout  << "allocated" << endl;
+        } else {
+            cout << "empty" << endl;
+        }
+    }
+    */
     writeBlock(f, blockNum, bitMap);
 
     return 0;

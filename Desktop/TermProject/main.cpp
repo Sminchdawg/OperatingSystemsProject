@@ -13,10 +13,10 @@ int main()
 
     Ext2File* f = ext2Open("/home/csis/5806.public/Test-fixed-1k.vdi", -1);
     bool inUse = inodeInUse(f, 255);
-    cout << inUse << endl;
+    cout << "In use: " << inUse << endl;
     freeInode(f, 255);
     bool nowInUse = inodeInUse(f, 255);
-    cout << nowInUse << endl;
+    cout << "Now in use: " << nowInUse << endl;
 
     ext2Close(f);
 
