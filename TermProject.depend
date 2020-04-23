@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1587522894 source:/home/csis/Desktop/TermProject/main.cpp
+1587603182 source:/home/csis/Desktop/TermProject/main.cpp
 	<iostream>
 	"DisplayBuffer.h"
 	"VDIFile.h"
@@ -58,7 +58,7 @@
 	<Ext2File.h>
 	"cmath"
 
-1587522894 source:/home/csis/Desktop/TermProject/src/Inode.cpp
+1587604064 source:/home/csis/Desktop/TermProject/src/Inode.cpp
 	"Inode.h"
 
 1587522894 source:/home/csis/Desktop/TermProjectBackup/main.cpp
@@ -115,4 +115,11 @@
 1587522894 source:/home/csis/Desktop/TermProjectBackup/src/VDIFile.cpp
 	"VDIFile.h"
 	<iostream>
+
+1587524307 source:/home/csis/Desktop/TermProject/src/FileAccess.cpp
+	"FileAccess.h"
+
+1587524340 /home/csis/Desktop/TermProject/include/FileAccess.h
+	<iostream>
+	<iomanip>
 

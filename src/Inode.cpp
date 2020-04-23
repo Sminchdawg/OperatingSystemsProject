@@ -58,36 +58,40 @@ uint32_t allocateInode(struct Ext2File *f, int32_t group) {
     // If the group is -1, the select any available inode fromany group
     uint32_t iNum;
     uint8_t* bitMap = new uint8_t[f->file_system_block_size];
+    int start = 0;
+    int end = f->num_block_groups;
 
-    if (group == -1) {
-       for (int i = 0; i < f->num_block_groups; i++) {
-            fetchBlock(f, f->bgdt->blockGroups[i].bg_block_bitmap, bitMap);
-            for (int j = 0; j < f->file_system_block_size; j++) {
-                cout << j << endl;
-                if (bitMap[j] != 0xff) {
-                    for (int k = 0; k < 8; k++) {
-                        cout << k << endl;
-                        if (bitMap[j] & (1 << (k - 1))) {
-                            cout << "in use" << endl;
-                        } else {
-                            cout << "not in use" << endl;
-                            iNum = k + 8 * j;
-                            break;
-                        }
-                    }
-                    if (iNum) {
+    if (group > -1) {
+        start = group;
+        end = group + 1;
+    }
+
+   for (int i = start; i < end; i++) {
+        fetchBlock(f, f->bgdt->blockGroups[i].bg_inode_bitmap, bitMap);
+        for (int j = 0; j < f->file_system_block_size; j++) {
+            if (bitMap[j] != 0xff) {
+                cout << "This is J: " << j << endl;
+                for (int k = 0; k < 8; k++) {
+                    if (bitMap[j] & (1 << (k))) {
+                        cout << "in use" << endl;
+                    } else {
+                        bitMap[j] |= 1 << k;
+
+                        iNum = (k + 8 * j) + 1 + (i * f->superBlock->s_inodes_per_group);
+
+                        writeBlock(f, f->bgdt->blockGroups[i].bg_inode_bitmap, bitMap);
                         break;
                     }
                 }
+                if (iNum) {
+                    break;
+                }
             }
-            if (iNum) {
-                break;
-            }
-       }
-    } else {
-        // Loop through entries in bitMap and find first one that has 0 value.
-        // Set to allocated, and return the index
-    }
+        }
+        if (iNum) {
+            break;
+        }
+   }
 
     return iNum;
 }
