@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1588042930 source:/home/csis/Desktop/TermProject/main.cpp
+1588049026 source:/home/csis/Desktop/TermProject/main.cpp
 	<iostream>
 	"DisplayBuffer.h"
 	"VDIFile.h"
@@ -7,6 +7,7 @@
 	"Ext2File.h"
 	"Inode.h"
 	"FileAccess.h"
+	"DirectoryAccess.h"
 	<iomanip>
 
 1587522894 /home/csis/Desktop/TermProject/include/DisplayBuffer.h
@@ -43,7 +44,7 @@
 	<iostream>
 	<iomanip>
 
-1587522894 /home/csis/Desktop/TermProject/include/Ext2File.h
+1588045766 /home/csis/Desktop/TermProject/include/Ext2File.h
 	<iostream>
 	<iomanip>
 	"VDIFile.h"
@@ -117,13 +118,24 @@
 	"VDIFile.h"
 	<iostream>
 
-1588042922 source:/home/csis/Desktop/TermProject/src/FileAccess.cpp
+1588043646 source:/home/csis/Desktop/TermProject/src/FileAccess.cpp
 	"FileAccess.h"
 	"Inode.h"
 
-1588039929 /home/csis/Desktop/TermProject/include/FileAccess.h
+1588043232 /home/csis/Desktop/TermProject/include/FileAccess.h
 	<iostream>
 	<iomanip>
 	"cmath"
+	"DisplayBuffer.h"
+
+1588048548 source:/home/csis/Desktop/TermProject/src/DirectoryAccess.cpp
+	"DirectoryAccess.h"
+
+1588050024 /home/csis/Desktop/TermProject/include/DirectoryAccess.h
+	<iostream>
+	<iomanip>
+	"Ext2File.h"
+	"Inode.h"
+	"FileAccess.h"
 	"DisplayBuffer.h"
 

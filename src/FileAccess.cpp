@@ -112,7 +112,7 @@ int32_t fetchBlockFromFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, v
     }
 }
 
-int32_t writeBlockFromFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, void *buf) {
+int32_t writeBlockToFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, void *buf) {
     // Write the given buffer into the block bNum in the file
     // this may involve allocating one or more data blocks
     int k = f->file_system_block_size / 4;
@@ -124,6 +124,7 @@ int32_t writeBlockFromFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, v
 
     if (bNum < 12) {
         if (i->i_block[bNum] == 0) {
+
             // i_block[b]; // allocate
             // writeInode(f, iNum, buf); // figure out what is being written here
         } else {
