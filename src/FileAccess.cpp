@@ -24,84 +24,89 @@ int32_t fetchBlockFromFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, v
     // Observations
     // The index of every data block is held in an array, that arrayh might be i_block array or a single indirect block
 
-    int k = i->i_size / 4;
+    int k = f->file_system_block_size / 4;
 
+    uint32_t* blockList = new uint32_t[f->file_system_block_size / 4];
+    int index;
     // If the index is in the i_block array, since 0-11 indeces are a block number in the i_block array
     if (bNum < 12) {
-        int* blockList = new int[12];
         // This is never going to work kekw
         blockList = i->i_block;
 
         // Goes to direct
+        goto direct;
     } else if (bNum < (12 + k)) {
+        cout << "The block is in the first single indirect block" << endl;
         // ^^^ Index is in the first single indirect block, aka i_block[12]
         if (i->i_block == 0) {
             return false;
         } else {
-            fetchBlock(f, i_block[12], buf);
+            fetchBlock(f, i->i_block[12], blockList);
             // buf gets a signle indirect block, which is a data block thats been sliced into 4-byte chunks,
             // each holding the block number of the next k data blocks, where k is the block size divided by 4
             // so buf should have the block numbers of the next 256 data blocks
-            // each 4byte chunk of the block has 1 block number?
-            int* blockList = buf;
-
+            // each 4 byte chunk of the block has 1 block number
             bNum -= 12;
             // Goes to direct
+            goto direct;
         }
     } else if (bNum < 12 + k + pow(k, 2)) {
+        cout << "The block is in the first double indirect block" << endl;
         // ^^ Index is in first double indirect block, aka i_block[13]
-        if (i_block[13] == 0) {
+        if (i->i_block[13] == 0) {
             return false;
         } else {
-            fetchBlock(f, i_block[13], buf);
-
+            fetchBlock(f, i->i_block[13], blockList);
             // buf gets indexes of k single indirect blocks
-            int* blockList = buf;
-            bNum -= b - 12 - k;
-
+            bNum -= (12 + k);
+            cout << "bNum after sub: " << bNum << endl;
             // Goes to single
+            goto single;
         }
     } else {
+        cout << "The block is in the first triple indirect block" << endl;
         // ^^ Index is in the first triple indirect block, aka i_block[14]
-        if (i_block[14] == 0) {
+        if (i->i_block[14] == 0) {
             return false;
         } else {
-            fetchBlock(f, i_block[14], buf)
+            fetchBlock(f, i->i_block[14], blockList);
 
-            int* blockList = buf;
-            b -= b - 12 - k - pow(k, 2);
+            long kPow = pow(k,2);
 
-            int index = b / pow(k, 2);
-            bNum = b % pow(k,2);
+            bNum -= (12 + k + kPow);
+
+            index = bNum / pow(k, 2);
+            bNum = bNum % kPow;
 
             if (blockList[index] == 0) {
                 return false;
             } else {
-                fetchBlock(f, blockList[index], buf);
-
-                int* blockList = buf;
-
-                // Goes to single
+                fetchBlock(f, blockList[index], blockList);
             }
         }
     }
 
+
     // Single
+    single:
+    cout << "bNum at single: " << bNum << endl;
     index = bNum / k;
-    bNum = b % k;
+    bNum = bNum % k;
+    cout << "index: " << index << endl;
+    cout << "bNum: " << bNum << endl;
 
     if (blockList[index] == 0) {
         return false;
     } else {
-        fetchBlock(f, blockList[index], buf);
-
-        int* blockList = buf;
+        fetchBlock(f, blockList[index], blockList);
     }
 
     // Direct
+    direct:
     if (blockList[bNum] == 0) {
         return false;
     } else {
+        cout << "Bnum: " << blockList[bNum] << endl;
         fetchBlock(f, blockList[bNum], buf);
         return true;
     }
@@ -110,4 +115,5 @@ int32_t fetchBlockFromFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, v
 int32_t writeBlockFromFile(struct Inode *i, uint32_t bNum, void *buf) {
     // Write the given buffer into the block bNum in the file
     // this may involve allocating one or more data blocks
+    return 0;
 }

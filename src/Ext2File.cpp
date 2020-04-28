@@ -51,7 +51,6 @@ void ext2Close(struct Ext2File *f) {
 int32_t fetchBlock(struct Ext2File * f, uint32_t blockNum, void *buf) {
     // Read the given block number from the file system into the buffer.
     // Return 0 if successful, some other value if the write fails.
-
     int spySeek = partitionSeek(f->partitionFile, blockNum * f->file_system_block_size, SEEK_CUR);
     int mistaRead = partitionRead(f->partitionFile, buf, f->file_system_block_size);
 
