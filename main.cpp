@@ -17,9 +17,15 @@ int main()
     fetchInode(f, 12, inode);
     displayInode(inode);
     uint8_t* pageBuffer = new uint8_t[f->file_system_block_size];
-    fetchBlockFromFile(f, inode, 90380, pageBuffer);
-    // fetchBlock(f, 534, pageBuffer);
-    // displayBuffer(pageBuffer, 256, 0);
+    writeBlockFromFile(f, inode, 65804, pageBuffer);
+
+
+    uint8_t* newPageBuffer = new uint8_t[f->file_system_block_size];
+    fetchBlockFromFile(f, inode, 65804, newPageBuffer);
+    displayBuffer(newPageBuffer, 256, 0);
+
+
+
     ext2Close(f);
 
     return 0;
