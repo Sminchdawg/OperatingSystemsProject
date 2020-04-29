@@ -36,7 +36,7 @@ int32_t fetchBlockFromFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, v
         // Goes to direct
         goto direct;
     } else if (bNum < (12 + k)) {
-        cout << "The block is in the first single indirect block" << endl;
+        // cout << "The block is in the first single indirect block" << endl;
         // ^^^ Index is in the first single indirect block, aka i_block[12]
         if (i->i_block == 0) {
             return false;

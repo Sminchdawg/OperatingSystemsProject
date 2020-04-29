@@ -6,6 +6,7 @@
 #include "Inode.h"
 #include "FileAccess.h"
 #include "DirectoryAccess.h"
+#include "SearchDirectory.h"
 #include <iomanip>
 
 using namespace std;
@@ -25,18 +26,18 @@ int main()
     fetchBlockFromFile(f, inode, 65804, newPageBuffer);
     displayBuffer(newPageBuffer, 256, 0);
     */
+    char* name = "examples/08.Strings";
 
-    char name[256];
-    uint32_t iNum;
-    Directory *d;
+    uint32_t iNum = searchDirectory(f, 30482, name);
+    cout << iNum << endl;
 
-    cout << "Root directory contents" << endl;
-    d = openDir(f, 2);
-    while (getNextDirent(f, d, iNum, name)) {
-        cout << "Inode: " << iNum << " name: " << name << endl;
-    }
-
-    closeDir(d);
+  char * pch;
+  pch = strtok (name," ,.-");
+  while (pch != NULL)
+  {
+    printf ("%s\n",pch);
+    pch = strtok (NULL, " ,.-");
+  }
     ext2Close(f);
 
     return 0;
