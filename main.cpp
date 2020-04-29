@@ -26,18 +26,13 @@ int main()
     fetchBlockFromFile(f, inode, 65804, newPageBuffer);
     displayBuffer(newPageBuffer, 256, 0);
     */
-    char* name = "examples/08.Strings";
 
-    uint32_t iNum = searchDirectory(f, 30482, name);
-    cout << iNum << endl;
+    char str[] = "examples/09.USB/Keyboard/KeyboardSerial/KeyboardSerial.ino";
 
-  char * pch;
-  pch = strtok (name," ,.-");
-  while (pch != NULL)
-  {
-    printf ("%s\n",pch);
-    pch = strtok (NULL, " ,.-");
-  }
+    uint32_t iNum = searchForFile(f, str);
+
+    cout << "iNum: " << iNum << endl;
+
     ext2Close(f);
 
     return 0;

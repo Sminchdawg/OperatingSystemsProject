@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1588131380 source:/home/csis/Desktop/TermProject/main.cpp
+1588135301 source:/home/csis/Desktop/TermProject/main.cpp
 	<iostream>
 	"DisplayBuffer.h"
 	"VDIFile.h"
@@ -141,7 +141,7 @@
 	"cmath"
 	"DisplayBuffer.h"
 
-1588128776 /home/csis/Desktop/TermProject/include/SearchDirectory.h
+1588135116 /home/csis/Desktop/TermProject/include/SearchDirectory.h
 	"Ext2File.h"
 	<iostream>
 	<iomanip>
@@ -149,6 +149,6 @@
 	<stdio.h>
 	<string.h>
 
-1588131907 source:/home/csis/Desktop/TermProject/src/SearchDirectory.cpp
+1588135266 source:/home/csis/Desktop/TermProject/src/SearchDirectory.cpp
 	"SearchDirectory.h"
 

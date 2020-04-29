@@ -8,6 +8,7 @@
 #define SEARCHDIRECTORY_H
 
 uint32_t searchDirectory (Ext2File* f, uint32_t iNum, char* name);
+uint32_t searchForFile (Ext2File* f, char* name);
 
 
 #endif // SEARCHDIRECTORY_H
