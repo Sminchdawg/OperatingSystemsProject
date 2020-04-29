@@ -106,7 +106,6 @@ int32_t fetchBlockFromFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, v
     if (blockList[bNum] == 0) {
         return false;
     } else {
-        cout << "Bnum: " << blockList[bNum] << endl;
         fetchBlock(f, blockList[bNum], buf);
         return true;
     }

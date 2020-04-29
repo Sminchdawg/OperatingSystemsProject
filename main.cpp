@@ -32,14 +32,11 @@ int main()
 
     cout << "Root directory contents" << endl;
     d = openDir(f, 2);
-    while (getNextDirent(d, iNum, name)) {
-        cout << "Inode: " << iNum << " name: " << d->block << endl;
+    while (getNextDirent(f, d, iNum, name)) {
+        cout << "Inode: " << iNum << " name: " << name << endl;
     }
 
     closeDir(d);
-
-
-
     ext2Close(f);
 
     return 0;

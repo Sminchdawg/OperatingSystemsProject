@@ -4,6 +4,7 @@
 #include "Ext2File.h"
 #include "Inode.h"
 #include "FileAccess.h"
+#include "cmath";
 #include "DisplayBuffer.h"
 #define DIRECTORYACCESS_H
 
@@ -16,13 +17,15 @@ struct Dirent {
 };
 
 struct Directory {
-    Dirent* dirent;
     uint32_t cursor;
     uint8_t* block;
+    uint32_t iNodeNum;
+    Inode iNode;
+    Dirent* dirent;
 };
 
 struct Directory *openDir(struct Ext2File *f, uint32_t iNum);
-bool getNextDirent(struct Directory *d, uint32_t &iNum, char *name);
+bool getNextDirent(struct Ext2File *f, struct Directory *d, uint32_t &iNum, char *name);
 void rewindDir(struct Directory *d);
 void closeDir(struct Directory *d);
 
