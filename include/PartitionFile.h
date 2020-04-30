@@ -1,8 +1,7 @@
 #ifndef PARTITIONFILE_H
 #define PARTITIONFILE_H
 #include "VDIFile.h"
-#include <iostream>
-#include <iomanip>
+
 
 struct PartitionFile {
     VDIFile* vdiFile;

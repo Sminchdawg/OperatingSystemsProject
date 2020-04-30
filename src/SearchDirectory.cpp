@@ -5,11 +5,10 @@ using namespace std;
 uint32_t searchDirectory (Ext2File* f, uint32_t iNum, char* name) {
     Directory* d = openDir(f, iNum);
     char tempName[256];
-    cout << "looking for: " << name << endl;
     while (getNextDirent(f, d, iNum, tempName)) {
         cout << tempName << endl;
         if (strcmp(name, tempName) == 0) {
-            cout << "found" << endl;
+            cout << "-----The directory is found-----" << endl;
             return d->dirent->iNum;
             break;
         }

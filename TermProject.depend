@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1588137486 source:/home/csis/Desktop/TermProject/main.cpp
+1588207441 source:/home/csis/Desktop/TermProject/main.cpp
 	<iostream>
 	"DisplayBuffer.h"
 	"VDIFile.h"
@@ -9,6 +9,7 @@
 	"FileAccess.h"
 	"DirectoryAccess.h"
 	"SearchDirectory.h"
+	"CopyToHost.h"
 	<iomanip>
 
 1587522894 /home/csis/Desktop/TermProject/include/DisplayBuffer.h
@@ -40,10 +41,8 @@
 	"VDIFile.h"
 	<iostream>
 
-1587522894 /home/csis/Desktop/TermProject/include/PartitionFile.h
+1588201198 /home/csis/Desktop/TermProject/include/PartitionFile.h
 	"VDIFile.h"
-	<iostream>
-	<iomanip>
 
 1588045766 /home/csis/Desktop/TermProject/include/Ext2File.h
 	<iostream>
@@ -119,7 +118,7 @@
 	"VDIFile.h"
 	<iostream>
 
-1588137788 source:/home/csis/Desktop/TermProject/src/FileAccess.cpp
+1588206173 source:/home/csis/Desktop/TermProject/src/FileAccess.cpp
 	"FileAccess.h"
 	"Inode.h"
 
@@ -141,7 +140,7 @@
 	"cmath"
 	"DisplayBuffer.h"
 
-1588135116 /home/csis/Desktop/TermProject/include/SearchDirectory.h
+1588204087 /home/csis/Desktop/TermProject/include/SearchDirectory.h
 	"Ext2File.h"
 	<iostream>
 	<iomanip>
@@ -149,6 +148,15 @@
 	<stdio.h>
 	<string.h>
 
-1588135266 source:/home/csis/Desktop/TermProject/src/SearchDirectory.cpp
+1588202117 source:/home/csis/Desktop/TermProject/src/SearchDirectory.cpp
+	"SearchDirectory.h"
+
+1588207168 source:/home/csis/Desktop/TermProject/src/CopyToHost.cpp
+	"CopyToHost.h"
+
+1588204101 /home/csis/Desktop/TermProject/include/CopyToHost.h
+	<iostream>
+	<iomanip>
+	"Ext2File.h"
 	"SearchDirectory.h"
 
