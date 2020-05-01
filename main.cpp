@@ -17,9 +17,15 @@ int main()
 
     Ext2File* f = ext2Open("/home/csis/5806.public/Test-fixed-1k.vdi", -1);
 
-    char fileToReadFrom[] = "examples/08.Strings/StringComparisonOperators/StringComparisonOperators.txt";
+    // char fileToReadFrom[] = "examples/08.Strings/StringComparisonOperators/StringComparisonOperators.txt";
+    // uint32_t num = searchDirectory(f, 11, fileToReadFrom);
+    char tempName = new char[256]
+    getAllDirents(f, 2, 256);
+    /*
     char fileToWriteTo[] = "/home/csis/stringComparisonOperators";
     copyToHost(f, fileToReadFrom, fileToWriteTo);
+    */
+
 
     ext2Close(f);
 

@@ -35,18 +35,22 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/DirectoryAccess.h" />
 		<Unit filename="include/DisplayBuffer.h" />
 		<Unit filename="include/Ext2File.h" />
 		<Unit filename="include/FileAccess.h" />
 		<Unit filename="include/Inode.h" />
 		<Unit filename="include/PartitionFile.h" />
+		<Unit filename="include/SearchDirectory.h" />
 		<Unit filename="include/VDIFile.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/DirectoryAccess.cpp" />
 		<Unit filename="src/DisplayBuffer.cpp" />
 		<Unit filename="src/Ext2File.cpp" />
 		<Unit filename="src/FileAccess.cpp" />
 		<Unit filename="src/Inode.cpp" />
 		<Unit filename="src/PartitionFile.cpp" />
+		<Unit filename="src/SearchDirectory.cpp" />
 		<Unit filename="src/VDIFile.cpp" />
 		<Extensions>
 			<code_completion />

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1588207441 source:/home/csis/Desktop/TermProject/main.cpp
+1588302094 source:/home/csis/Desktop/TermProject/main.cpp
 	<iostream>
 	"DisplayBuffer.h"
 	"VDIFile.h"
@@ -12,7 +12,7 @@
 	"CopyToHost.h"
 	<iomanip>
 
-1587522894 /home/csis/Desktop/TermProject/include/DisplayBuffer.h
+1588294571 /home/csis/Desktop/TermProject/include/DisplayBuffer.h
 	<cstdint>
 
 1587522894 /home/csis/Desktop/TermProject/include/VDIFile.h
@@ -118,7 +118,7 @@
 	"VDIFile.h"
 	<iostream>
 
-1588206173 source:/home/csis/Desktop/TermProject/src/FileAccess.cpp
+1588290462 source:/home/csis/Desktop/TermProject/src/FileAccess.cpp
 	"FileAccess.h"
 	"Inode.h"
 
@@ -128,10 +128,10 @@
 	"cmath"
 	"DisplayBuffer.h"
 
-1588126072 source:/home/csis/Desktop/TermProject/src/DirectoryAccess.cpp
+1588302341 source:/home/csis/Desktop/TermProject/src/DirectoryAccess.cpp
 	"DirectoryAccess.h"
 
-1588126022 /home/csis/Desktop/TermProject/include/DirectoryAccess.h
+1588302098 /home/csis/Desktop/TermProject/include/DirectoryAccess.h
 	<iostream>
 	<iomanip>
 	"Ext2File.h"
@@ -139,6 +139,7 @@
 	"FileAccess.h"
 	"cmath"
 	"DisplayBuffer.h"
+	<string.h>
 
 1588204087 /home/csis/Desktop/TermProject/include/SearchDirectory.h
 	"Ext2File.h"
@@ -148,7 +149,7 @@
 	<stdio.h>
 	<string.h>
 
-1588202117 source:/home/csis/Desktop/TermProject/src/SearchDirectory.cpp
+1588212562 source:/home/csis/Desktop/TermProject/src/SearchDirectory.cpp
 	"SearchDirectory.h"
 
 1588207168 source:/home/csis/Desktop/TermProject/src/CopyToHost.cpp

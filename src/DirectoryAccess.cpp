@@ -1,4 +1,5 @@
 #include "DirectoryAccess.h"
+#define    EXT2_S_IFDIR    0x4000    /* directory */
 
 using namespace std;
 
@@ -29,9 +30,30 @@ bool getNextDirent(struct Ext2File *f, struct Directory *d, uint32_t &iNum, char
             return true;
         }
     }
-
     return false;
 }
+
+void getAllDirents (Ext2File* f, uint32_t iNum, char* tempName)
+{
+    Inode* inode = new Inode;
+    fetchInode(f, iNum, inode);
+    // cout << "ENTER THIS FUNCTION" << endl;
+   // displayInode(inode);
+    // cout << "IM RUNNING OUT OF STUFF TO PUT HERE: " << (inode->i_mode & EXT2_S_IFDIR) << endl;
+    if (!((inode->i_mode & EXT2_S_IFDIR) == EXT2_S_IFDIR)) {
+        // cout << "THIS IS A FILE + Inum: " << iNum << endl;
+        // End of path segment
+    } else {
+        Directory* d = openDir(f, iNum);
+        // cout << "THIS IS A DIRECTORY + Inum: " << iNum << endl;
+        while (getNextDirent(f, d, iNum, tempName)) {
+            if (strcmp(tempName, ".") != 0 && strcmp(tempName, "..") != 0) {
+                getAllDirents(f, iNum, tempName);
+            }
+        }
+    }
+}
+
 
 void rewindDir(struct Directory *d) {
     // Reset the directory's cursor to 0
@@ -41,5 +63,4 @@ void rewindDir(struct Directory *d) {
 void closeDir(struct Directory *d) {
     // Close the directory
     // Deallocate any dynamic memory used by the directory
-
 }
