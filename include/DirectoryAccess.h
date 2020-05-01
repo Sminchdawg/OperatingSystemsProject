@@ -29,6 +29,6 @@ struct Directory *openDir(struct Ext2File *f, uint32_t iNum);
 bool getNextDirent(struct Ext2File *f, struct Directory *d, uint32_t &iNum, char *name);
 void rewindDir(struct Directory *d);
 void closeDir(struct Directory *d);
-void getAllDirents (Ext2File* f, uint32_t iNum, char* tempName);
+void getAllDirents (Ext2File* f, uint32_t iNum, char* tempName, int tabLevel);
 
 #endif // DIRECTORYACCESS_H

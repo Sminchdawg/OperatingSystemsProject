@@ -33,22 +33,25 @@ bool getNextDirent(struct Ext2File *f, struct Directory *d, uint32_t &iNum, char
     return false;
 }
 
-void getAllDirents (Ext2File* f, uint32_t iNum, char* tempName)
+void getAllDirents (Ext2File* f, uint32_t iNum, char* tempName, int tabLevel)
 {
     Inode* inode = new Inode;
     fetchInode(f, iNum, inode);
-    // cout << "ENTER THIS FUNCTION" << endl;
-   // displayInode(inode);
-    // cout << "IM RUNNING OUT OF STUFF TO PUT HERE: " << (inode->i_mode & EXT2_S_IFDIR) << endl;
     if (!((inode->i_mode & EXT2_S_IFDIR) == EXT2_S_IFDIR)) {
-        // cout << "THIS IS A FILE + Inum: " << iNum << endl;
-        // End of path segment
     } else {
         Directory* d = openDir(f, iNum);
-        // cout << "THIS IS A DIRECTORY + Inum: " << iNum << endl;
+        tabLevel++;
         while (getNextDirent(f, d, iNum, tempName)) {
             if (strcmp(tempName, ".") != 0 && strcmp(tempName, "..") != 0) {
-                getAllDirents(f, iNum, tempName);
+                for(int i = 0; i < tabLevel; i++) {
+                    cout << "|";
+                    if (tabLevel != 0 && i == tabLevel - 1){
+                        cout << "------";
+                    }
+                    cout << "\t";
+                }
+                cout << tempName << endl;
+                getAllDirents(f, iNum, tempName, tabLevel);
             }
         }
     }

@@ -19,8 +19,8 @@ int main()
 
     // char fileToReadFrom[] = "examples/08.Strings/StringComparisonOperators/StringComparisonOperators.txt";
     // uint32_t num = searchDirectory(f, 11, fileToReadFrom);
-    char tempName = new char[256]
-    getAllDirents(f, 2, 256);
+    char* tempName = new char[256];
+    getAllDirents(f, 2, tempName, -1);
     /*
     char fileToWriteTo[] = "/home/csis/stringComparisonOperators";
     copyToHost(f, fileToReadFrom, fileToWriteTo);
