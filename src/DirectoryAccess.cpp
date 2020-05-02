@@ -33,10 +33,11 @@ bool getNextDirent(struct Ext2File *f, struct Directory *d, uint32_t &iNum, char
     return false;
 }
 
-void getAllDirents (Ext2File* f, uint32_t iNum, char* tempName, int tabLevel)
+void getAllDirents (Ext2File* f, uint32_t iNum, int tabLevel)
 {
     Inode* inode = new Inode;
     fetchInode(f, iNum, inode);
+    char* tempName = new char[256];
     if (!((inode->i_mode & EXT2_S_IFDIR) == EXT2_S_IFDIR)) {
     } else {
         Directory* d = openDir(f, iNum);
@@ -51,7 +52,7 @@ void getAllDirents (Ext2File* f, uint32_t iNum, char* tempName, int tabLevel)
                     cout << "\t";
                 }
                 cout << tempName << endl;
-                getAllDirents(f, iNum, tempName, tabLevel);
+                getAllDirents(f, iNum, tabLevel);
             }
         }
     }

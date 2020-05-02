@@ -17,15 +17,13 @@ int main()
 
     Ext2File* f = ext2Open("/home/csis/5806.public/Test-fixed-1k.vdi", -1);
 
-    // char fileToReadFrom[] = "examples/08.Strings/StringComparisonOperators/StringComparisonOperators.txt";
-    // uint32_t num = searchDirectory(f, 11, fileToReadFrom);
-    char* tempName = new char[256];
-    getAllDirents(f, 2, tempName, -1);
-    /*
-    char fileToWriteTo[] = "/home/csis/stringComparisonOperators";
-    copyToHost(f, fileToReadFrom, fileToWriteTo);
-    */
+    //char fileToReadFrom[] = "/arduino-1.6.7-linux64.tar.xz";
+    //uint32_t num = searchDirectory(f, 11, fileToReadFrom);
+    // char* tempName = new char[256];
+    getAllDirents(f, 2, -1);
 
+    // char fileToWriteTo[] = "/home/csis/turdBall";
+    // copyToHost(f, fileToReadFrom, fileToWriteTo);
 
     ext2Close(f);
 
