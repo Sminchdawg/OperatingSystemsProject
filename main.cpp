@@ -38,7 +38,7 @@ int main()
         }
     }
 
-/*
+    /*
     char fileToReadFrom[] = "/examples/02.Digital/toneMultiple/layout.png";
     uint32_t num = searchDirectory(f, 11, fileToReadFrom);
     // getAllDirents(f, 2, -1);
