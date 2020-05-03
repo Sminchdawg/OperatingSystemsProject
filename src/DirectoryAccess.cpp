@@ -33,7 +33,7 @@ bool getNextDirent(struct Ext2File *f, struct Directory *d, uint32_t &iNum, char
     return false;
 }
 
-void getAllDirents (Ext2File* f, uint32_t iNum, int tabLevel)
+void getAllDirents (Ext2File* f, uint32_t iNum, uint32_t tabLevel)
 {
     Inode* inode = new Inode;
     fetchInode(f, iNum, inode);

@@ -35,6 +35,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/CopyToHost.h" />
 		<Unit filename="include/DirectoryAccess.h" />
 		<Unit filename="include/DisplayBuffer.h" />
 		<Unit filename="include/Ext2File.h" />
@@ -44,6 +45,7 @@
 		<Unit filename="include/SearchDirectory.h" />
 		<Unit filename="include/VDIFile.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/CopyToHost.cpp" />
 		<Unit filename="src/DirectoryAccess.cpp" />
 		<Unit filename="src/DisplayBuffer.cpp" />
 		<Unit filename="src/Ext2File.cpp" />

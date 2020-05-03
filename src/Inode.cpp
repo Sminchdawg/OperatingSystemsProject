@@ -4,10 +4,13 @@ using namespace std;
 
 int32_t fetchInode(struct Ext2File *f, uint32_t iNum, struct Inode *buf) {
     // Read the inode whose index number is iNum and store the information in the buffer
+
     int iNodesPerBlock = f->file_system_block_size / f->superBlock->s_inode_size;
     int blockGroup = floor(((float)iNum - 1) / ((float)f->superBlock->s_inodes_per_group));
     int iNumIndex = (iNum -1) % f->superBlock->s_inodes_per_group;
     int blockNum = floor((float)iNumIndex / (float)iNodesPerBlock) + f->bgdt->blockGroups[blockGroup].bg_inode_table;
+    // cout << blockNum << endl;
+    // cout << f->bgdt->blockGroups[blockGroup].bg_inode_table;
     iNumIndex = iNumIndex % iNodesPerBlock;
 
     Inode* iNodes;

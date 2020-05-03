@@ -32,7 +32,6 @@ struct Ext2File *ext2Open(char *fn, int32_t pNum) {
     fetchSuperblock(ext2File, 0, superblock);
 
     // Gets BGD
-
     struct BGDT* bgdt = new BGDT;
     fetchBGDT(ext2File, 0, bgdt);
     ext2File->bgdt = bgdt;
@@ -96,7 +95,7 @@ int32_t fetchSuperblock(struct Ext2File *f, uint32_t blockNum, struct Superblock
         if (f->superBlock->s_log_block_size == 0) {
            f->file_system_block_size = 1024;
         } else {
-            f->file_system_block_size = pow(f->superBlock->s_log_block_size, 2);
+            f->file_system_block_size = 1024 * pow(f->superBlock->s_log_block_size, 2);
         }
     } else {
         fetchBlock(f, blockNum * f->superBlock->s_blocks_per_group + f->superBlock->s_first_data_block, sb);
@@ -177,9 +176,9 @@ void displaySuperBlock(struct Superblock* superblock) {
     cout << "Default reserve GID: ";
     printf("%d\n", superblock->s_def_resuid);
     cout << "First inode number: ";
-    printf("%d\n", superblock->s_def_resgid);
-    cout << "Inode size: ";
     printf("%d\n", superblock->s_first_ino);
+    cout << "Inode size: ";
+    printf("%d\n", superblock->s_inode_size);
     cout << "Block group number: ";
     printf("%d\n", superblock->s_block_group_nr);
     cout << "Feature compatibility bits: ";
@@ -228,7 +227,12 @@ int32_t fetchBGDT(struct Ext2File *f, uint32_t blockNum, struct BGDT *bgdt) {
 
     bgdt->blockGroups = new Blockgroup[f->num_block_groups];
     if (blockNum == 0) {
-        int spySeek = partitionSeek(f->partitionFile, 2048, SEEK_CUR);
+        int spySeek;
+        if (f->file_system_block_size == 1024) {
+                spySeek = partitionSeek(f->partitionFile, f->file_system_block_size * 2, SEEK_CUR);
+        } else {
+            spySeek = partitionSeek(f->partitionFile, f->file_system_block_size, SEEK_CUR);
+        }
         int mistaRead = partitionRead(f->partitionFile, bgdt->blockGroups, 32 * f->num_block_groups);
 
         if (spySeek == -1 || mistaRead == -1) {
