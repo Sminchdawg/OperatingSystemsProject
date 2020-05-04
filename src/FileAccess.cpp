@@ -92,7 +92,6 @@ int32_t writeBlockToFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, voi
     uint32_t ibNum;
     int index;
 
-    cout << "BUM " << bNum << endl;
     if (bNum < 12) {
         if (i->i_block[bNum] == 0) {
             i->i_block[bNum] = allocate(f, -1);

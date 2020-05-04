@@ -16,6 +16,7 @@ int main()
 {
 
     Ext2File* f = ext2Open("/home/csis/5806.public/Test-fixed-1k.vdi", -1);
+
     /*
     int input;
     while (input != 4) {
@@ -39,6 +40,7 @@ int main()
         }
     }
     */
+
 
     copyFromHost(f, "/home/csis/toneMultipleLayout-4k", "taco");
     // getAllDirents(f, 2, -1);

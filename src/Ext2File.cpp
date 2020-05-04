@@ -70,6 +70,8 @@ int32_t writeBlock(struct Ext2File *f, uint32_t blockNum, void *buf) {
 
     if (spySeek == -1 || mistaWrite == -1) {
         cout << "Spy or write has failed in Ext2File for the write block" << endl;
+        cout << "Spyseek: " << spySeek << endl;
+        cout << "Mistawrite: " << mistaWrite << endl;
         return -1;
     }
 
@@ -267,6 +269,8 @@ int32_t writeBGDT(struct Ext2File *f, uint32_t blockNum, struct BGDT *bgdt) {
 
    if (spySeek == -1 || mistaWrite == -1) {
         cout << "Spy or write has failed in Ext2File for the write block" << endl;
+        cout << "Spyseek: " << spySeek << endl;
+        cout << "Mistawrite: " << mistaWrite << endl;
         return -1;
     }
 
