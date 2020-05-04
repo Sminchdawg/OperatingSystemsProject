@@ -1,10 +1,10 @@
 #ifndef EXT2FILE_H
-#define EXT2FILE_H
 #include <iostream>
 #include <iomanip>
 #include "VDIFile.h"
 #include "PartitionFile.h"
 #include "cmath";
+#define EXT2FILE_H
 
 struct Superblock {
     uint32_t s_inodes_count; // Bytes 0-4

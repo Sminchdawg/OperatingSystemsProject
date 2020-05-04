@@ -106,7 +106,7 @@ int32_t fetchSuperblock(struct Ext2File *f, uint32_t blockNum, struct Superblock
 }
 
 
-int32_t writeSuperblock(struct Ext2File *f, uint32_t blockNum, struct Ext2Superblock *sb) {
+int32_t writeSuperblock(struct Ext2File *f, uint32_t blockNum, struct Superblock *sb) {
    // Write the superblock to the given block.
    // Return 0 for success, non-zero for failure.
 

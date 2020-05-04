@@ -16,6 +16,7 @@ int main()
 {
 
     Ext2File* f = ext2Open("/home/csis/5806.public/Test-fixed-1k.vdi", -1);
+    /*
     int input;
     while (input != 4) {
         cout << "1. List all files in the directory" << endl;
@@ -37,15 +38,10 @@ int main()
             copyToHost(f, fileToReadFrom, fileToWriteTo);
         }
     }
-
-    /*
-    char fileToReadFrom[] = "/examples/02.Digital/toneMultiple/layout.png";
-    uint32_t num = searchDirectory(f, 11, fileToReadFrom);
-    // getAllDirents(f, 2, -1);
-
-    char fileToWriteTo[] = "/home/csis/toneMultipleLayout-4k";
-    copyToHost(f, fileToReadFrom, fileToWriteTo);
     */
+
+    copyFromHost(f, "/home/csis/toneMultipleLayout-4k", "taco");
+    // getAllDirents(f, 2, -1);
 
     ext2Close(f);
 

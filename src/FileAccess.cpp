@@ -1,6 +1,5 @@
 #include "FileAccess.h"
 #include "Inode.h"
-#include "Ext2File.h"
 
 using namespace std;
 
@@ -194,8 +193,8 @@ int32_t allocate(Ext2File* f, int32_t blockGroup) {
                         blockNum = k + 8 * j + i * f->superBlock->s_blocks_per_group + f->superBlock->s_first_data_block;
                         tempBlock[j] |= 1 << k;
                         writeBlock(f, f->bgdt->blockGroups[i].bg_inode_bitmap, tempBlock);
-                        f->bgdt->blockGroups[i].bg_free_blocks_count--;
-                        f->superBlock->s_free_blocks_count--;
+                        f->bgdt->blockGroups[i].bg_free_blocks_count - 1;
+                        f->superBlock->s_free_blocks_count - 1;
                         writeSuperblock(f, 0, f->superBlock);
                         writeBGDT(f, 0, f->bgdt);
                         return blockNum;
