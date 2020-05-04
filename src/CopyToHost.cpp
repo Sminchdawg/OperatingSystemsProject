@@ -45,10 +45,8 @@ uint32_t copyFromHost(Ext2File* f, char* fileToReadFrom, char* fileToWriteTo) {
     cout << "dir cursor: " << d->cursor << endl;
     cout << "lastDirentInum: " << lastDirentInum << endl;
     Dirent* dirent = new Dirent;
-    dirent->fileType = 1;
+    dirent->fileType = 01;
     dirent->iNum = newInum;
-
-
 
     char* baseName = basename(fileToReadFrom);
     uint8_t baseNameSize = strlen(baseName);
@@ -63,7 +61,11 @@ uint32_t copyFromHost(Ext2File* f, char* fileToReadFrom, char* fileToWriteTo) {
     writeBlockToFile(f, &d->iNode, 1, dirent, dirent->iNum);
     uint8_t* buffer = new uint8_t[byteCount];
     fetchBlockFromFile(f, &d->iNode, 1, buffer);
-    displayBuffer(dirent, 256, 0);
+    d->iNode.i_links_count++;
+    displayBuffer(buffer, 256, 0);
+    //d->iNode.i_size += 1024;
+    displayInode(&d->iNode);
+    writeInode(f, d->iNodeNum, &d->iNode);
 
     close(fd);
 }

@@ -21,6 +21,7 @@ bool getNextDirent(struct Ext2File *f, struct Directory *d, uint32_t &iNum, char
         fetchBlockFromFile(f, &d->iNode, blockNum, d->block);
         d->dirent = (Dirent*)(d->block + offset);
         d->cursor += d->dirent->recLen;
+        cout << "iNum; " << d->dirent->iNum << endl;
         if (d->dirent->iNum != 0) {
             iNum = d->dirent->iNum;
             for (int i=0;i<d->dirent->nameLen;i++) {

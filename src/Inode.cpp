@@ -81,22 +81,19 @@ uint32_t allocateInode(struct Ext2File *f, int32_t group) {
                         bitMap[j] |= 1 << k;
 
                         iNum = (k + 8 * j) + 1 + (i * f->superBlock->s_inodes_per_group);
-
                         writeBlock(f, f->bgdt->blockGroups[i].bg_inode_bitmap, bitMap);
-                        break;
+                        f->superBlock->s_free_inodes_count--;
+                        writeSuperblock(f, 0, f->superBlock);
+                        f->bgdt->blockGroups[i].bg_free_inodes_count--;
+                        writeBGDT(f, 0, f->bgdt);
+                        return iNum;
                     }
-                }
-                if (iNum) {
-                    break;
                 }
             }
         }
-        if (iNum) {
-            break;
-        }
    }
 
-    return iNum;
+    return 0;
 }
 
 int32_t freeInode(struct Ext2File *f, uint32_t iNum) {
