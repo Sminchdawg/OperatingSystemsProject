@@ -167,7 +167,7 @@ int32_t writeBlockToFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, voi
     }
 
     cout << "Made it to writeBlock" << endl;
-    writeBlock(f, blockList[bNum], buf);
+    //writeBlock(f, blockList[bNum], buf);
 
     return 0;
 }

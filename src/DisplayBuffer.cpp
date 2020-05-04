@@ -3,8 +3,11 @@
 
 using namespace std;
 
-void displayBufferPage(uint8_t *buf, uint32_t count, uint32_t start, uint64_t offset) {
+void displayBufferPage(void *buf, uint32_t count, uint32_t start, uint64_t offset) {
     char hex[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+
+    uint8_t* buffer = static_cast<uint8_t*>(buf);
 
     printf("Offset: 0x");
     printf("%02X", offset);
@@ -32,7 +35,7 @@ void displayBufferPage(uint8_t *buf, uint32_t count, uint32_t start, uint64_t of
                 // This prints the hexadecmial values
 
             if (16 * i + j >= start && 16 * i + j < start + count) {
-                printf("%02X", buf[(16 * i + j) - start]);
+                printf("%02X", buffer[(16 * i + j) - start]);
             } else {
                 printf("  ");
             }
@@ -46,9 +49,9 @@ void displayBufferPage(uint8_t *buf, uint32_t count, uint32_t start, uint64_t of
         for (int j = 0; j < 16; j++) {
 
             if (16 * i + j >= start && 16 * i + j < start + count) {
-                if (isprint(buf[(16 * i + j) - start])) {
+                if (isprint(buffer[(16 * i + j) - start])) {
                     // This prints the characters values
-                        printf("%c", buf[(16 * i + j) - start]);
+                        printf("%c", buffer[(16 * i + j) - start]);
                     } else {
                         printf(" ");
                     }
@@ -64,7 +67,7 @@ void displayBufferPage(uint8_t *buf, uint32_t count, uint32_t start, uint64_t of
 }
 
 
-void displayBuffer(uint8_t *buf, uint32_t count, uint64_t offset) {
+void displayBuffer(void *buf, uint32_t count, uint64_t offset) {
     int rounds = (count + 255)/ 256;
     // TODO: Maybe use newOffset? seems to work for now
     int newOffset = offset;

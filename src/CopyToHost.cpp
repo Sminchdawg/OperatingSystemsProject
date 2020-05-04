@@ -48,30 +48,22 @@ uint32_t copyFromHost(Ext2File* f, char* fileToReadFrom, char* fileToWriteTo) {
     dirent->fileType = 1;
     dirent->iNum = newInum;
 
-    string s = "";
-    int size = strlen(fileToReadFrom);
 
-    for (int i = 0; i < size; i++) {
-        s = s + fileToReadFrom[i];
+
+    char* baseName = basename(fileToReadFrom);
+    uint8_t baseNameSize = strlen(baseName);
+    for (int i = 0; i < baseNameSize; i++) {
+        dirent->name[i] = baseName[i];
     }
 
-    size_t found = s.find_last_of("/\\");
-    string file = s.substr(found+1);
-
-    uint8_t fileNameSize = file.length();
-    for (int i = 0; i < fileNameSize; i++) {
-        dirent->name[i] = file[i];
-    }
-
-    dirent->nameLen = fileNameSize;
+    dirent->nameLen = baseNameSize;
     dirent->recLen = f->file_system_block_size - (dirent->nameLen + 8);
 
 
     writeBlockToFile(f, &d->iNode, 1, dirent, dirent->iNum);
     uint8_t* buffer = new uint8_t[byteCount];
     fetchBlockFromFile(f, &d->iNode, 1, buffer);
-    displayBuffer(buffer, 256, 0);
-
+    displayBuffer(dirent, 256, 0);
 
     close(fd);
 }
