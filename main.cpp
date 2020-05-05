@@ -17,11 +17,12 @@ int main()
 
     Ext2File* f = ext2Open("/home/csis/5806.public/Test-fixed-1k.vdi", -1);
 
-    /*
+
     int input;
     while (input != 4) {
         cout << "1. List all files in the directory" << endl;
         cout << "2. Write to the host" << endl;
+        cout << "3. Write to the VDI" << endl;
         cout << "4. Exit" << endl;
         cin >> input;
 
@@ -37,12 +38,12 @@ int main()
             cout << "Enter a directory to write to: ";
             cin >> fileToWriteTo;
             copyToHost(f, fileToReadFrom, fileToWriteTo);
+        } else if (input == 3) {
+            copyFromHost(f, "/home/csis/random-file", "taco");
         }
     }
-    */
 
 
-    copyFromHost(f, "/home/csis/toneMultipleLayout-4k", "taco");
     // getAllDirents(f, 2, -1);
 
     ext2Close(f);

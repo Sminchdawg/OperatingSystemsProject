@@ -60,11 +60,8 @@ int32_t fetchBlockFromFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, v
 
     // Single
     single:
-    cout << "bNum at single: " << bNum << endl;
     index = bNum / k;
     bNum = bNum % k;
-    cout << "index: " << index << endl;
-    cout << "bNum: " << bNum << endl;
 
     if (blockList[index] == 0) {
         return false;
@@ -90,7 +87,7 @@ int32_t writeBlockToFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, voi
     uint32_t* blockList = new uint32_t[f->file_system_block_size / 4];
     uint32_t* temp = new uint32_t[f->file_system_block_size / 4];
     uint32_t ibNum;
-    int index;
+    uint32_t index;
 
     if (bNum < 12) {
         if (i->i_block[bNum] == 0) {
@@ -102,7 +99,7 @@ int32_t writeBlockToFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, voi
         goto direct;
     } else if (bNum < 12 + k) {
         cout << "The block is in the first single indirect block in write" << endl;
-        if (i->i_block == 0) {
+        if (i->i_block[12] == 0) {
             i->i_block[12] = allocate(f, -1);
             writeInode(f, iNum, i);
         }
@@ -113,7 +110,7 @@ int32_t writeBlockToFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, voi
         bNum -= 12;
 
         goto direct;
-    } else if (bNum < 12 + k + k * k) {
+    } else if (bNum < (12 + k + (k * k))) {
         cout << "The block is in the first double indirect block in write" << endl;
         if (i->i_block[13] == 0) {
             i->i_block[13] = allocate(f, -1);
@@ -121,7 +118,6 @@ int32_t writeBlockToFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, voi
         }
 
         fetchBlock(f, i->i_block[13], temp);
-
         ibNum = i->i_block[13];
         blockList = temp;
         bNum -= (12 + k);
@@ -129,7 +125,6 @@ int32_t writeBlockToFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, voi
         goto single;
     } else {
         cout << "The block is in the first triple indirect block in write" << endl;
-
         if (i->i_block[14] == 0) {
             i->i_block[14] = allocate(f, -1);
             writeInode(f, iNum, i);
@@ -140,13 +135,19 @@ int32_t writeBlockToFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, voi
         ibNum = i->i_block[14];
         blockList = temp;
 
-        long kPow = k * k;
-
-        bNum -= (12 + k + kPow);
-
-        index = bNum / (k * k);
-        bNum = bNum % kPow;
+        bNum -= (12 + k + (k*k));
     }
+
+    index = bNum / (k*k);
+    bNum = bNum % (k*k);
+
+    if (blockList[index] == 0) {
+        blockList[index] = allocate(f, -1);
+        writeBlock(f, ibNum, blockList);
+    }
+    ibNum = blockList[index];
+    fetchBlock(f, blockList[index], temp);
+    blockList = temp;
 
     single:
     index = bNum / k;
@@ -154,7 +155,7 @@ int32_t writeBlockToFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, voi
 
     if (blockList[index] == 0) {
         blockList[index] = allocate(f, -1);
-        writeBlock(f, bNum, i);
+        writeBlock(f, ibNum, blockList);
     }
     ibNum = blockList[index];
     fetchBlock(f, blockList[index], temp);
@@ -163,16 +164,16 @@ int32_t writeBlockToFile(struct Ext2File *f, struct Inode *i, uint32_t bNum, voi
     direct:
     if (blockList[bNum] == 0) {
         blockList[bNum] = allocate(f, -1);
-        writeBlock(f, bNum, i);
+        writeBlock(f, ibNum, blockList);
     }
-
-    cout << "Made it to writeBlock" << endl;
+    cout << blockList[bNum] << endl;
     writeBlock(f, blockList[bNum], buf);
 
     return 0;
 }
 
 int32_t allocate(Ext2File* f, int32_t blockGroup) {
+    cout << "ALLOCATE IS HIT" << endl;
     int32_t firstGroup = 0;
     int32_t lastGroup = f->num_block_groups -1;
     uint8_t* tempBlock = new uint8_t[f->file_system_block_size];
@@ -184,15 +185,23 @@ int32_t allocate(Ext2File* f, int32_t blockGroup) {
     }
 
     for (int i = firstGroup; i <= lastGroup; i++) {
-        fetchBlock(f, f->bgdt->blockGroups[i].bg_inode_bitmap, tempBlock);
+        cout << "i for fetch: " << i << endl;
+        fetchBlock(f, f->bgdt->blockGroups[i].bg_block_bitmap, tempBlock);
+        //cout << "bitmap: " << f->bgdt->blockGroups[i].bg_block_bitmap << endl;
+        //displayBuffer(tempBlock, 1024, 0);
 
         for (int j = 0; j < f->file_system_block_size; j++) {
             if (tempBlock[j] != 0xff) {
                 for (int k = 0; k < 8; k++) {
-                    if (tempBlock[j] & (1 << k)) {
+                    if (!(tempBlock[j] & (1 << k))) {
+                        cout << "this is j for allocate: " << j << endl;
                         blockNum = k + 8 * j + i * f->superBlock->s_blocks_per_group + f->superBlock->s_first_data_block;
-                        tempBlock[j] |= 1 << k;
-                        writeBlock(f, f->bgdt->blockGroups[i].bg_inode_bitmap, tempBlock);
+                        tempBlock[j] = tempBlock[j] | 1 << k;
+
+                        writeBlock(f, f->bgdt->blockGroups[i].bg_block_bitmap, tempBlock);
+
+
+
                         f->bgdt->blockGroups[i].bg_free_blocks_count - 1;
                         f->superBlock->s_free_blocks_count - 1;
                         writeSuperblock(f, 0, f->superBlock);

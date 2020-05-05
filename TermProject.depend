@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1588609528 source:/home/csis/Desktop/TermProject/main.cpp
+1588642379 source:/home/csis/Desktop/TermProject/main.cpp
 	<iostream>
 	"DisplayBuffer.h"
 	"VDIFile.h"
@@ -118,7 +118,7 @@
 	"VDIFile.h"
 	<iostream>
 
-1588603502 source:/home/csis/Desktop/TermProject/src/FileAccess.cpp
+1588642253 source:/home/csis/Desktop/TermProject/src/FileAccess.cpp
 	"FileAccess.h"
 	"Inode.h"
 
@@ -153,7 +153,7 @@
 1588598509 source:/home/csis/Desktop/TermProject/src/SearchDirectory.cpp
 	"SearchDirectory.h"
 
-1588609507 source:/home/csis/Desktop/TermProject/src/CopyToHost.cpp
+1588643033 source:/home/csis/Desktop/TermProject/src/CopyToHost.cpp
 	"CopyToHost.h"
 
 1588597299 /home/csis/Desktop/TermProject/include/CopyToHost.h
