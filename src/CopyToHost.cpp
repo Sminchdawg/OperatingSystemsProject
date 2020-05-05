@@ -26,7 +26,7 @@ uint32_t copyToHost(Ext2File* f, char* fileToReadFrom, char* fileToWriteTo) {
     return 0;
 }
 
-uint32_t copyFromHost(Ext2File* f, char* fileToReadFrom, char* fileToWriteTo) {
+uint32_t copyFromHost(Ext2File* f, char* fileToReadFrom) {
     int fd = open(fileToReadFrom, O_RDONLY, 0700);
 
     uint32_t newInum = allocateInode(f, -1);

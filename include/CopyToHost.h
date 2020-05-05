@@ -10,6 +10,6 @@
 #define COPYTOHOST_H
 
 uint32_t copyToHost(Ext2File* f, char* fileToReadFrom, char* fileToWriteTo);
-uint32_t copyFromHost(Ext2File* f, char* fileToReadFrom, char* fileToWriteTo);
+uint32_t copyFromHost(Ext2File* f, char* fileToReadFrom);
 
 #endif // COPYTOHOST_H

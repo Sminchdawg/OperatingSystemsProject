@@ -15,7 +15,7 @@ using namespace std;
 int main()
 {
 
-    Ext2File* f = ext2Open("/home/csis/5806.public/Test-fixed-1k.vdi", -1);
+    Ext2File* f = ext2Open("/home/csis/5806.public/Test-fixed-4k.vdi", -1);
 
 
     int input;
@@ -39,7 +39,10 @@ int main()
             cin >> fileToWriteTo;
             copyToHost(f, fileToReadFrom, fileToWriteTo);
         } else if (input == 3) {
-            copyFromHost(f, "/home/csis/random-file", "taco");
+            char* fileToReadFrom = new char[256];
+            cout << "Enter a directory to a file from the host: ";
+            cin >> fileToReadFrom;
+            copyFromHost(f, fileToReadFrom);
         }
     }
 
